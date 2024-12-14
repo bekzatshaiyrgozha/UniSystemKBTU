@@ -1,0 +1,49 @@
+package Controllers;
+import java.util.*;
+
+import DLL.DBContext;
+import Enumerations.UserType;
+import Users.*; 
+public class UserController {
+	public static boolean authorize(String fileName , String username , String password) {
+		if(fileName.equals("teacher.txt")) {
+			Vector<Teacher> teachers = (Vector<Teacher>) UserController.getUsers(UserType.TEACHER); 
+			for(Teacher t  : teachers) {
+				if(t.getUsername().equals(teachers) && t.getPassword().equals(password))
+					return true; 
+			}
+			return false; 
+		}
+		else if(fileName.equals("students.txt")){
+			Vector<Student> students = (Vector<Student>) UserController.getUsers(UserType.STUDENT);
+			for(Student student : students){
+				if (student.getUsername().equals(username) && student.getPassword().equals(password)) {
+					return true;
+				}
+			}
+			return false; 
+		}
+		else if(fileName.equals("managers.txt")){
+			Vector<Manager> managers = (Vector<Manager>) UserController.getUsers(UserType.MANAGER);
+			for(Manager manager : managers){
+				if (manager.getUsername().equals(username) && manager.getPassword().equals(password)) {
+					return true;
+				}
+			}
+			return false ;
+		}
+	}
+	public static Object getUsers(UserType type) {
+		switch (type){
+		case TEACHER:
+			return DBContext.getTeachers();
+		case STUDENT:
+			return DBContext.getStudents();
+		case MANAGER:
+			//return DBContext.getManagers();
+		default:
+			return null;
+
+	}
+	}
+}

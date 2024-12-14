@@ -1,0 +1,9 @@
+package Main;
+
+import Views.MainView;
+
+public class Launcher {
+	public static void main(String[] args) {
+		MainView.welcome();
+	}
+}
