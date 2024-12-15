@@ -4,7 +4,7 @@ import java.util.*;
 import Users.*; 
 public class DBContext {
 	
-	private static String fullPath = "C:\\Users\\Asus\\Desktop\\UniSystemKBTU\\UniversitySystem\\src\\Data\\" ; 
+	private static String fullPath = "/home/xan001/UniSystemKBTU/UniversitySystem/src/Data/" ; 
 	private static DBContext db = new DBContext();
 	
 	public static Vector<Teacher> teacher;

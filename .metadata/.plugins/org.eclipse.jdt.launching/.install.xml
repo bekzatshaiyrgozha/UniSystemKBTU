@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <dirs>
     <entry loc="C:\Users\Asus\.p2\pool\plugins\org.eclipse.justj.openjdk.hotspot.jre.full.win32.x86_64_23.0.1.v20241024-1700\jre" stamp="1730356071592"/>
+    <entry loc="/home/xan001/.p2/pool/plugins/org.eclipse.justj.openjdk.hotspot.jre.full.linux.x86_64_23.0.1.v20241024-1700" stamp="1734251850266"/>
     <entry loc="C:\Users\Asus\.p2\pool\plugins\org.eclipse.justj.openjdk.hotspot.jre.full.win32.x86_64_23.0.1.v20241024-1700" stamp="1730356071592"/>
+    <entry loc="/usr/lib/jvm/java-21-openjdk-amd64" stamp="1734243832583"/>
+    <entry loc="/home/xan001/.p2/pool/plugins/org.eclipse.justj.openjdk.hotspot.jre.full.linux.x86_64_23.0.1.v20241024-1700/jre" stamp="1734251850266"/>
 </dirs>
