@@ -1,0 +1,38 @@
+package Views;
+
+import java.util.Scanner;
+
+public class TeacherView {
+	private static Scanner in = new Scanner(System.in);
+	public static void welwcome() {
+		System.out.println("Welcome to WSP!\nPlease select the option:");
+		System.out.println("1. Create a new user;");
+		System.out.println("2. Show teachers;");
+		System.out.println("3. Show students;");
+		System.out.println("4. Exit;");
+		
+		int option = in.nextInt();
+		
+		if (option == 1) {
+			createUser();
+		} else if (option == 2) {
+			showTeachers();
+		} else if (option == 3) {
+			showStudents(); 
+		}
+		else if (option == 4) {
+			System.out.println("Bye Bye!");
+			MainView.welcome() ;
+		}
+	}
+	public static void welcome() {
+		
+		System.out.println("Welcome to WSP! TO TEACHER SIDE!\nPlease select the option:");
+		System.out.println("0.Exit"); 
+		int option = in.nextInt() ;
+		if(option == 0) {
+			MainView.welcome(); 
+		}
+	}
+
+}

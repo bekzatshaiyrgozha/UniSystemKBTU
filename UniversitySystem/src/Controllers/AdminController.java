@@ -25,4 +25,32 @@ public class AdminController {
 		
 		return true;
 	}
+	public static boolean deleteUser(String username , UserType type) {
+		switch(type) {
+		case TEACHER :
+			boolean removedTeacher = DBContext.teacher.removeIf(teacher -> teacher.getUsername().equals(username));
+			if(removedTeacher) {
+				return DBContext.saveTeachers(); 
+			}
+			break; 
+		case STUDENT: 
+			boolean removedStudent = DBContext.student.removeIf(student -> student.getUsername().equals(username));
+            if (removedStudent) {
+                return DBContext.saveStudents();
+            }
+            break;
+        case MANAGER:
+            boolean removedManager = DBContext.manager.removeIf(manager -> manager.getUsername().equals(username));
+            if (removedManager) {
+                return DBContext.saveManagers();
+            }
+            break;
+        default :
+        	return false ;
+		}
+		return false ;
+	}
+	public static Admin getAdmin() {
+		return Admin.getInstance(); 
+	}
 }
