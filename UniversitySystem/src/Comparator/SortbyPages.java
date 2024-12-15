@@ -5,4 +5,3 @@ public class SortbyPages implements Comparator <Book> {
 	        return Integer.compare(b1.getPages(), b2.getPages());
 	    }
 	}
-

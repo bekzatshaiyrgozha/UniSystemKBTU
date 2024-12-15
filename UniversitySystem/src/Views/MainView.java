@@ -13,11 +13,11 @@ public class MainView {
 	
 	public static void welcome() {
         System.out.println("Welcome to WSP!\nSelect your role:");
-        System.out.println("0.Admin"); 
+        System.out.println("0. Admin"); 
         System.out.println("1. Teacher");
         System.out.println("2. Manager");
         System.out.println("3. Student");
-
+        System.out.print("\nRole : ");
         int option = in.nextInt();
 
         switch (option) {
@@ -77,7 +77,7 @@ public class MainView {
                     StudentView.welcome(); 
                     break;
                 case MANAGER:
-                    ///managerMenu();
+                    ManagerView.welcome();
                     break;
             }
         } else {

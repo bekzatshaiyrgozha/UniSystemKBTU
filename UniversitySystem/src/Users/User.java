@@ -2,6 +2,8 @@ package Users;
 
 import java.io.Serializable;
 
+import Utils.News;
+
 public abstract class User implements Serializable {
 	private static final long serialVersionUID = 1L;
 	String username;
@@ -19,5 +21,8 @@ public abstract class User implements Serializable {
 	}
 	public String toString() {
 		return this.username;
+	}
+	public void receiveNews(News news) {
+		System.out.println("News for " + username + ": " + news.getTitle()) ; 
 	}
 }

@@ -3,7 +3,8 @@ import java.util.*;
 
 import DLL.DBContext;
 import Enumerations.UserType;
-import Users.*; 
+import Users.*;
+import Utils.News; 
 public class UserController {
 	public static boolean authorize(String fileName , String username , String password) {
 		Vector<?> users = null ; 
@@ -34,10 +35,20 @@ public class UserController {
 		case STUDENT:
 			return DBContext.getStudents();
 		case MANAGER:
-			//return DBContext.getManagers();
+			return DBContext.getManagers();
 		default:
 			return null;
 
 	}
+	}
+	public static Vector<User> getAllUsers(){
+		Vector<User> allUsers = new Vector<>();
+        allUsers.addAll(DBContext.getTeachers());  // Add all teachers
+        allUsers.addAll(DBContext.getStudents());  // Add all students
+        allUsers.addAll(DBContext.getManagers());  // Add all managers
+        return allUsers;
+	}
+	public static Vector<News> getAllNews(){
+		return DBContext.getDb().getNews(); 
 	}
 }

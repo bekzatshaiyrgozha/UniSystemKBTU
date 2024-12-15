@@ -18,12 +18,11 @@ public class AdminController {
 			return DBContext.saveStudents(); 
 		case MANAGER:
 			Manager newManager = new Manager(username, password);
-			break;
+			DBContext.manager.add(newManager); 
+			return DBContext.saveManagers(); 
 		default:
 			return false;
 		}
-		
-		return true;
 	}
 	public static boolean deleteUser(String username , UserType type) {
 		switch(type) {

@@ -18,7 +18,9 @@ public class AdminView {
 		System.out.println("- 1. Create a new user;");
 		System.out.println("- 2. Show teachers;");
 		System.out.println("- 3. Show students;");
-		System.out.println("- 4.Delete a user"); 
+		System.out.println("- 4. Show managers"); 
+		System.out.println("- 5. Delete a user"); 
+		System.out.println("- 6.See all news"); 
 		System.out.print("\nOption : ");
 		int option = in.nextInt();
 		if(option == 0) {
@@ -32,10 +34,22 @@ public class AdminView {
 		} else if (option == 3) {
 			showStudents(); 
 		} else if(option == 4) {
-			deleteUser(); 
+			showManagers(); 
+		} else if(option == 5) {
+			deleteUser();
+		} else if(option == 6) {
+			ManagerView.seeNews();
 		}
 	}
-	
+	public static void showManagers() {
+		System.out.println("Loading the managers..."); 
+		
+		Object o = UserController.getUsers(UserType.MANAGER);
+		
+		System.out.println(o);
+		
+		welcome();
+	}
 	public static void showTeachers() {
 		System.out.println("Loading the teachers...");
 		
@@ -88,7 +102,7 @@ public class AdminView {
 			}
 			welcome();
 		}
-		if (option == 2) {
+		else if (option == 2) {
 			System.out.println("Creating a new student..."); 
 			System.out.println("Enter a username:");
 			String username = in.nextLine();
@@ -96,6 +110,23 @@ public class AdminView {
 			String password = in.nextLine();
 			
 			boolean res = AdminController.addUser(username, password, UserType.STUDENT); 
+			
+			if(res) {
+				System.out.println(username + " is created!"); 
+			}
+			else {
+				System.out.println("error!"); 
+			}
+			welcome() ;
+		}
+		else if(option == 3) {
+			System.out.println("Creating a new manager...");
+			System.out.println("Enter a username:");
+			String username = in.nextLine();
+			System.out.println("Enter a password:");
+			String password = in.nextLine();
+
+			boolean res = AdminController.addUser(username, password, UserType.MANAGER); 
 			
 			if(res) {
 				System.out.println(username + " is created!"); 
