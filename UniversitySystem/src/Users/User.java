@@ -25,4 +25,5 @@ public abstract class User implements Serializable {
 	public void receiveNews(News news) {
 		System.out.println("News for " + username + ": " + news.getTitle()) ; 
 	}
+	
 }

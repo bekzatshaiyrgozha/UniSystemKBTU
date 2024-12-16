@@ -3,20 +3,23 @@ import java.io.File;
 import java.util.*; 
 import Users.*;
 import Utils.News; 
+import Utils.Course;
 public class DBContext {
 	
-	private static String fullPath = "C:\\Users\\Asus\\Desktop\\UniSystemKBTU\\UniversitySystem\\src\\Data\\" ; 
+	private static String fullPath = "/home/xan001/UniSystemKBTU/UniversitySystem/src/Data/ " ; 
 	private static DBContext db = new DBContext();
 	
 	public static Vector<Teacher> teacher;
 	public static Vector<Student> student ;
 	public static Vector<Manager> manager; 
 	public static Vector<News> newsList ; 
+	public static Vector<Course> courseList;
 	{
 		this.teacher = getTeachers();
 		this.student = getStudents() ; 
 		this.manager = getManagers() ; 
 		this.newsList = getNews(); 
+		this.courseList = getCourse();
 	}
 	
 	private DBContext() {
@@ -86,6 +89,20 @@ public class DBContext {
         }
         return new Vector<>();
     }
+	public static Vector<Course> getCourse() {
+        String filePath = fullPath + "course.txt";
+        File file = new File(filePath);
+
+        if (!file.exists() || file.length() == 0) {
+            System.out.println("File is empty or does not exist, returning an empty list.");
+            return new Vector<>();
+        }
+        Object o = ReaderWriter.deserialize(filePath);
+        if (o instanceof Vector) {
+            return (Vector<Course>) o;
+        }
+        return new Vector<>();
+    }
 	public static boolean saveTeachers() {
 		return ReaderWriter.serialize(teacher, fullPath + "teachers.txt");
 	}
@@ -95,15 +112,23 @@ public class DBContext {
 	public static boolean saveManagers() {
 		return ReaderWriter.serialize(manager, fullPath + "manager.txt"); 
 	}
+	
 	public static DBContext getDb() {
 		return db;
 	}
 	public static boolean saveNews() {
 		return ReaderWriter.serialize(newsList, fullPath+ "news.txt"); 
 	}
+	public static boolean saveCourse() {
+		return ReaderWriter.serialize(courseList, fullPath+ "course.txt");
+	}
 	public static void addNews(News news) {
 		newsList.add(news); 
 		saveNews(); 
+	}
+	public static void addCourse(Course course) {
+		courseList.add(course); 
+		saveCourse(); 
 	}
 	public static Vector<User> getAllUsers(){
 		Vector<User> allUsers = new Vector<>(); 

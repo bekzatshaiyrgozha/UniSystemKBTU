@@ -4,6 +4,7 @@ import java.util.*;
 import DLL.DBContext;
 import Enumerations.UserType;
 import Users.*;
+import Utils.Course;
 import Utils.News; 
 public class UserController {
 	public static boolean authorize(String fileName , String username , String password) {
@@ -50,5 +51,8 @@ public class UserController {
 	}
 	public static Vector<News> getAllNews(){
 		return DBContext.getDb().getNews(); 
+	}
+	public static Vector<Course> getAllCourses(){
+		return DBContext.getDb().getCourse();
 	}
 }

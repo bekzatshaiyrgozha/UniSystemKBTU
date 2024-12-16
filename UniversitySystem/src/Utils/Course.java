@@ -1,49 +1,58 @@
 package Utils;
 
-//class Course
-class Course {
-  private String courseName;
-  private int courseCredits;
-  private String courseDescription;
-  private String courseAttribute;
+import java.io.Serializable;
+import Controllers.ManagerController;
+import Users.Manager;
 
+public class Course implements Serializable {
+    private static final long serialVersionUID = 1L;
 
-  public Course(String courseName, int courseCredits, String courseDescription, String courseAttribute) {
-      this.courseName = courseName;
-      this.courseCredits = courseCredits;
-      this.courseDescription = courseDescription;
-      this.courseAttribute = courseAttribute;
-  }
+    private String courseId;      
+    private String courseName;   
+    private String courseTeacher;
+    private String semester;
 
+    public Course(String courseId, String courseName, String courseTeacher) {
+        this.courseId = courseId;
+        this.courseName = courseName;
+        this.courseTeacher = courseTeacher;
 
-  //getters and setters:
-  public String getCourseName() {
-      return courseName;
-  }
+    }
 
-  public void setCourseName(String courseName) {
-      this.courseName = courseName;
-  }
+    public String getCourseId() {
+        return courseId;
+    }
 
-  public int getCourseCredits() {
-      return courseCredits;
-  }
+    public void setCourseId(String courseId) {
+        this.courseId = courseId;
+    }
 
-  public void setCourseCredits(int courseCredits) {
-      this.courseCredits = courseCredits;
-  }
+    public String getCourseName() {
+        return courseName;
+    }
 
-  public String getCourseDescription() {
-      return courseDescription;
-  }
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
+    }
 
-  public void setCourseDescription(String courseDescription) {
-      this.courseDescription = courseDescription;
-  }
+    public String getCourseTeacher() {
+        return courseTeacher;
+    }
 
-  @Override
-  public String toString() {
-      return "Course [courseName=" + courseName + ", courseCredits=" + courseCredits
-              + ", courseDescription=" + courseDescription + ", courseAttribute=" + courseAttribute + "]";
-  }
+    public void setCourseTeacher(String courseTeacher) {
+        this.courseTeacher = courseTeacher;
+    }
+    public String getsemester() {
+        return semester;
+    }
+
+    public void setsemester(String semester) {
+        this.semester = semester;
+    }
+    
+    @Override
+    public String toString() {
+        return "Course [courseId=" + courseId + ", courseName=" + courseName
+                + ", courseTeacher=" + courseTeacher + "]";
+    }
 }

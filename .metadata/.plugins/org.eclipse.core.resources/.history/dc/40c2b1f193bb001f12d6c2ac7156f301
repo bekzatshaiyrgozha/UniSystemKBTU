@@ -1,0 +1,68 @@
+package Utils;
+
+import java.io.Serializable;
+import Controllers.UserController;
+import Users.User;
+
+public class Course implements Serializable {
+    private static final long serialVersionUID = 1L; // Recommended for serialization
+
+    private String courseName;
+    private int courseCredits;
+    private String courseDescription;
+    private String courseAttribute; // e.g., Semester, Type (Mandatory, Elective)
+
+    // Constructor
+    public Course(String courseName, int courseCredits, String courseDescription, String courseAttribute) {
+        this.courseName = courseName;
+        this.courseCredits = courseCredits;
+        this.courseDescription = courseDescription;
+        this.courseAttribute = courseAttribute;
+    }
+
+    // Getters and setters
+    public String getCourseName() {
+        return courseName;
+    }
+
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
+    }
+
+    public int getCourseCredits() {
+        return courseCredits;
+    }
+
+    public void setCourseCredits(int courseCredits) {
+        this.courseCredits = courseCredits;
+    }
+
+    public String getCourseDescription() {
+        return courseDescription;
+    }
+
+    public void setCourseDescription(String courseDescription) {
+        this.courseDescription = courseDescription;
+    }
+
+    public String getCourseAttribute() {
+        return courseAttribute;
+    }
+
+    public void setCourseAttribute(String courseAttribute) {
+        this.courseAttribute = courseAttribute;
+    }
+
+    // Notify users about the course (e.g., when a new course is added or changes occur)
+//    public void notifyUsers() {
+//        for (User user : UserController.getAllUsers()) {
+//            user.receiveCourseUpdate(this);  // Assuming `receiveCourseUpdate()` method exists in User class
+//        }
+//    }
+
+    @Override
+    public String toString() {
+        return "Course [courseName=" + courseName + ", courseCredits=" + courseCredits
+                + ", courseDescription=" + courseDescription + ", courseAttribute=" + courseAttribute + "]";
+    }
+}

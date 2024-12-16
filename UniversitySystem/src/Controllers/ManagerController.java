@@ -2,6 +2,7 @@ package Controllers;
 
 import DLL.DBContext;
 import Utils.News;
+import Utils.Course;
 
 public class ManagerController {
 	public static void createNews(String title , String content) {
@@ -13,4 +14,16 @@ public class ManagerController {
 		DBContext.addNews(news);
 		return true; 
 	}
+	
+	public static void createcourse(String courseId , String courseName , String courseTeacher) {
+		Course course = new Course(courseId , courseName , courseTeacher); 
+		DBContext.addCourse(course);
+	}
+
+	public static boolean createcourse(Course course) {
+		DBContext.addCourse(course);
+		return true; 
+	}
+
+	
 }
