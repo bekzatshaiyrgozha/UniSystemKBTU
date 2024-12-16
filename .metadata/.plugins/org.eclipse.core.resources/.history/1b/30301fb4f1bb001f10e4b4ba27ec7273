@@ -10,7 +10,7 @@ import Utils.Course;
 public class ManagerView {
 private static Scanner in = new Scanner(System.in);
     
-
+    // Manager welcome page
     public static void welcome() {
         System.out.println("Welcome to WSP!\n<MANAGER SIDE>\nPlease select the option:");
         System.out.println("- 0. Exit");
@@ -42,9 +42,9 @@ private static Scanner in = new Scanner(System.in);
         }
     }
 
-    
+    // Method to create news
     public static void createNews() {
-        in.nextLine(); 
+        in.nextLine(); // consume the newline character left by nextInt()
         
         System.out.println("Enter the news title:");
         String title = in.nextLine();
@@ -52,10 +52,11 @@ private static Scanner in = new Scanner(System.in);
         System.out.println("Enter the news content:");
         String content = in.nextLine();
         
+        // Create a News object
         News news = new News(title, content);
         
         
-       
+        // Delegate the saving of the news to the ManagerController
         boolean res = ManagerController.createNews(news);
         
         if(res) {
@@ -68,7 +69,7 @@ private static Scanner in = new Scanner(System.in);
     }
     
     public static void createcourse() {
-        in.nextLine();
+        in.nextLine(); // consume the newline character left by nextInt()
         
         System.out.println("Enter the Course Id:");
         String courseId = in.nextLine();
@@ -98,6 +99,7 @@ private static Scanner in = new Scanner(System.in);
     public static void seeNews() {
         System.out.println("Loading all news...");
         
+        // Retrieve all news using UserController
         for (News news : UserController.getAllNews()) {
             System.out.println(news);
             System.out.println("------------------------");
