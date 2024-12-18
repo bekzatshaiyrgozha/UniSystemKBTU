@@ -1,0 +1,29 @@
+public static void authorize(String fileName, UserType userType) {
+    System.out.println("Please, enter your credentials:");
+    in.nextLine();  // Consume the newline character left by nextInt()
+
+    System.out.print("Username: ");
+    String username = in.nextLine();
+
+    System.out.print("Password: ");
+    String password = in.nextLine();
+
+    boolean res = UserController.authorize(fileName, username, password);
+
+    if (res) {
+        System.out.println("Login successful!");
+
+        if (userType == UserType.STUDENT) {
+            loggedInStudent = UserController.getStudentByUsername(username);
+            StudentView.welcome(loggedInStudent);  
+        } else if (userType == UserType.TEACHER) {
+            Teacher loggedInTeacher = UserController.getTeacherByUsername(username); // Get the logged-in teacher
+            TeacherView.welcome(loggedInTeacher);  // Pass the Teacher object to the TeacherView
+        } else if (userType == UserType.MANAGER) {
+            ManagerView.welcome();  // Assuming ManagerView exists and is implemented
+        }
+    } else {
+        System.out.println("Invalid username or password.");
+        welcome();  
+    }
+}

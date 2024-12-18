@@ -1,0 +1,25 @@
+package Users;
+import Enumerations.Faculty;
+import Enumerations.RegistrationStatus;
+
+public class Student extends User {
+	private static Faculty faculty;
+
+	public Student(String username, String password, Faculty faculty) {
+		super(username, password);
+		this.faculty = faculty;
+	}
+	
+	public Faculty getFaculty() {
+		return faculty;
+	}
+	public void setFaculty() {
+		this.faculty = faculty;
+	}
+	
+
+	
+
+	
+
+}

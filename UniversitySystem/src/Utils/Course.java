@@ -1,8 +1,7 @@
 package Utils;
 
 import java.io.Serializable;
-import Controllers.ManagerController;
-import Users.Manager;
+import Enumerations.Faculty;
 
 public class Course implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -10,12 +9,14 @@ public class Course implements Serializable {
     private String courseId;      
     private String courseName;   
     private String courseTeacher;
-    private String semester;
-
-    public Course(String courseId, String courseName, String courseTeacher) {
+    private int studyYear; 
+    private Faculty faculty;
+    public Course(String courseId, String courseName, String courseTeacher , int studyYear, Faculty faculty) {
         this.courseId = courseId;
         this.courseName = courseName;
         this.courseTeacher = courseTeacher;
+        this.studyYear = studyYear;
+        this.faculty = faculty;
 
     }
 
@@ -42,17 +43,25 @@ public class Course implements Serializable {
     public void setCourseTeacher(String courseTeacher) {
         this.courseTeacher = courseTeacher;
     }
-    public String getsemester() {
-        return semester;
+    public int getStudyYear() {
+        return studyYear;
     }
 
-    public void setsemester(String semester) {
-        this.semester = semester;
+    public void setstudyYear(int studyYear) {
+        this.studyYear = studyYear;
+    }
+
+    public Faculty getFaculty() {
+        return faculty;
+    }
+
+    public void setFaculty(Faculty faculty) {
+        this.faculty = faculty;
     }
     
     @Override
     public String toString() {
         return "Course [courseId=" + courseId + ", courseName=" + courseName
-                + ", courseTeacher=" + courseTeacher + "]";
+                + ", courseTeacher=" + courseTeacher + ", studyYear=" + studyYear + ", faculty="+ faculty + "]";
     }
 }

@@ -1,9 +1,11 @@
 package Views;
 
 import java.util.Scanner;
+import java.util.Vector;
 
 import Controllers.ManagerController;
 import Controllers.UserController;
+import Enumerations.Faculty;
 import Utils.News;
 import Utils.Course;
 
@@ -78,9 +80,59 @@ private static Scanner in = new Scanner(System.in);
         
         System.out.println("Enter the course teacher:");
         String courseTeacher = in.nextLine();
-       
         
-		Course course = new Course(courseId, courseName, courseTeacher);
+        System.out.println("Select study year:");
+        System.out.println("1. First Year");
+        System.out.println("2. Second Year");
+        System.out.println("3. Third Year");
+        System.out.println("4. Fourth Year");
+        System.out.print("Option: ");
+        int yearOption = in.nextInt();
+        int studyYear = 0;
+
+        switch (yearOption) {
+            case 1:
+                studyYear = 1;
+                break;
+            case 2:
+                studyYear = 2;
+                break;
+            case 3:
+                studyYear = 3;
+                break;
+            case 4:
+                studyYear = 4;
+                break;
+            default:
+                System.out.println("Invalid year option");
+                return;  // Выход из метода при неверном выборе
+        }
+
+
+        System.out.println("Select the faculty:");
+        System.out.println("1. FIT");
+        System.out.println("2. BS");
+        System.out.println("3. SEPI");
+        System.out.print("Option: ");
+        int facultyOption = in.nextInt();
+        Faculty faculty = null;
+        
+        switch (facultyOption) {
+        case 1:
+            faculty = Faculty.FIT;
+            break;
+        case 2:
+            faculty = Faculty.BS;
+            break;
+        case 3:
+            faculty = Faculty.SEPI;
+            break;
+        default:
+            System.out.println("Invalid faculty option. Defaulting to FIT.");
+    }
+
+        
+        Course course = new Course(courseId, courseName, courseTeacher, yearOption, faculty);
         
        
         boolean res = ManagerController.createcourse(course);
@@ -106,13 +158,20 @@ private static Scanner in = new Scanner(System.in);
         welcome();
     }
     public static void seecourse() {
-    	System.out.println("Loading all course");
-    	
-    	for (Course course : UserController.getAllCourses()) {
-            System.out.println(course);
-            System.out.println("------------------------");
+        System.out.println("Загружаю все курсы...");
+        Vector<Course> courses = UserController.getAllCourses();  // Получаем курсы из файла
+
+        if (courses.isEmpty()) {
+            System.out.println("Нет доступных курсов.");
+        } else {
+            // Выводим информацию о каждом курсе
+            for (Course course : courses) {
+                System.out.println(course);  // Метод toString() класса Course будет выводить нужную информацию
+                System.out.println("------------------------");
+            }
         }
-   
-        welcome();
+
+        welcome();  
     }
+
 }

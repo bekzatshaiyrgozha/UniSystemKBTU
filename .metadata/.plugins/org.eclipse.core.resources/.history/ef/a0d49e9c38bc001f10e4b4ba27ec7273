@@ -1,0 +1,127 @@
+package Views;
+
+import java.util.Scanner;
+import Users.*; 
+import Controllers.*; 
+import Controllers.UserController;
+import Enumerations.UserType;
+
+public class MainView {
+	
+    private static User loggedInUser;
+	
+	private static Scanner in = new Scanner(System.in);
+	
+	
+	
+	public static void welcome() {
+        System.out.println("Welcome to WSP!\nSelect your role:");
+        System.out.println("0. Admin"); 
+        System.out.println("1. Teacher");
+        System.out.println("2. Manager");
+        System.out.println("3. Student");
+        System.out.print("\nRole : ");
+        int option = in.nextInt();
+
+        switch (option) {
+            case 0 :
+            	authorizeAdmin(); 
+            	break ; 
+            case 1:
+                authorize("teacher.txt", UserType.TEACHER);
+                break;
+            case 2:
+                authorize("managers.txt", UserType.MANAGER);
+                break;
+            case 3:
+                authorize("students.txt", UserType.STUDENT);
+                break;
+            default:
+                System.out.println("Invalid option!");
+                welcome();
+        }
+    }
+    public static void authorizeAdmin() {
+    	System.out.println("Please , enter admin credentials :"); 
+    	in.nextLine() ; 
+    	System.out.print("Username : ") ;
+    	String username = in.nextLine(); 
+    	System.out.print("Password : ");
+    	String password = in.nextLine() ; 
+    	Admin admin = Admin.getInstance() ;
+    	if(admin.getUsername().equals(username) && admin.getPassword().equals(password)) {
+    		System.out.println("Admin login successful!"); 
+    		AdminView.welcome();
+    	}
+    	else {
+    		System.out.println("Invalid username or password , TRY AGAIN:(!"); 
+    		welcome() ;
+    	}
+    }
+    public static void authorize(String fileName, UserType userType) {
+        System.out.println("Please, enter your credentials:");
+        in.nextLine();
+
+        System.out.print("Username: ");
+        String username = in.nextLine();
+
+        System.out.print("Password: ");
+        String password = in.nextLine();
+
+        boolean res = UserController.authorize(fileName, username, password);
+
+        if (res) {
+            System.out.println("Login successful!");
+            switch (userType) {
+                case TEACHER:
+                    TeacherView.welcome();
+                    break;
+                case STUDENT:
+                    StudentView.welcome(null); 
+                    break;
+                case MANAGER:
+                    ManagerView.welcome();
+                    break;
+            }
+        } else {
+            System.out.println("Invalid username or password.");
+            welcome();
+        }
+    }
+    public static void welcome(Student student) {
+	    System.out.println("Welcome to WSP!\nPlease select the option:");
+	    System.out.println("0. Exit");
+	    System.out.println("1. See all news");
+	    System.out.println("2. View my profile");
+	    int option = in.nextInt();
+
+	    if (option == 0) {
+	        System.out.println("Bye bye!");
+	        MainView.welcome();
+	    } else if (option == 1) {
+	        ManagerView.seeNews();
+	    } else if (option == 2) {
+	        myProfile(student); 
+	    } else {
+	        System.out.println("Invalid option!");
+	    }
+	}
+	public static void myProfile(Student student) {
+	    // Проверяем, что объект student не равен null
+	    if (student == null) {
+	        System.out.println("Student data is not available.");
+	        return;
+	    }
+	    
+	    // Заголовок профиля
+	    System.out.println("----- My Profile -----");
+	    
+	    // Выводим основные данные о студенте, проверяя на null
+	    System.out.println("Username: " + (student.getUsername() != null ? student.getUsername() : "Not Available"));
+	    System.out.println("Faculty: " + (student.getFaculty() != null ? student.getFaculty() : "Not Available"));
+	    System.out.println("Semester: " + (student.getSemester() != null ? student.getSemester() : "Not Available"));
+	}
+
+
+    
+}

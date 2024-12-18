@@ -1,0 +1,52 @@
+package Views;
+
+import java.util.Scanner;
+
+import Controllers.UserController;
+import Users.Student;
+import Enumerations.Faculty;
+import Enumerations.SemesterType;
+
+public class StudentView {
+    static Scanner in = new Scanner(System.in); 
+
+    public static void welcome() {
+        System.out.println("Welcome to WSP!\nPlease select the option:");
+        System.out.println("0. Exit");
+        System.out.println("1. See all news");
+        System.out.println("7. View My Profile");
+
+        int option = in.nextInt();
+        in.nextLine();  // Clear the buffer
+
+        if(option == 0) {
+            System.out.println("Bye bye!"); 
+            MainView.welcome();
+        }
+        else if(option == 1) {
+            ManagerView.seeNews();
+        } 
+        else if(option == 7) {
+            // Sample student object (replace with actual student object)
+            Student student = new Student("s_1", "password123", Faculty.FIT, SemesterType.FALL);
+            myProfile(student);
+        }
+        else {
+            System.out.println("Invalid option. Please try again.");
+            welcome();
+        }
+    }
+
+    public static void myProfile(Student student) {
+        System.out.println("\n--- Student Profile ---");
+        System.out.println("Username: " + student.getUsername());
+        System.out.println("Faculty: " + student.getFaculty());
+        System.out.println("Semester: " + student.getSemester());
+        System.out.println("-----------------------");
+    }
+
+    public static void main(String[] args) {
+        // Test the welcome method
+        welcome();
+    }
+}

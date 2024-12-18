@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
     <fullyQualifiedTypeName name="Utils.Course"/>
+    <fullyQualifiedTypeName name="Enumerations.RegistrationStatus"/>
+    <fullyQualifiedTypeName name="Enumerations.Faculty"/>
+    <fullyQualifiedTypeName name="Enumerations.SemesterType"/>
+    <fullyQualifiedTypeName name="Utils.Register"/>
 </qualifiedTypeNameHistroy>

@@ -1,0 +1,83 @@
+package Views;
+
+import java.util.Scanner;
+import Controllers.UserController;
+import DLL.DBContext;
+import Utils.Course;
+import Utils.Register;
+import Users.Teacher;
+import Users.Student;
+
+public class TeacherView {
+    static Scanner in = new Scanner(System.in); 
+
+    public static void welcome(Teacher loggedInTeacher) {
+        System.out.println("Welcome to WSP, " + loggedInTeacher.getUsername() + "!");
+        System.out.println("Please select an option:");
+        System.out.println("0. Exit");
+        System.out.println("1. See all news");
+        System.out.println("2. View students in my courses");
+        int option = in.nextInt();
+        in.nextLine();  
+
+        if (option == 0) {
+            System.out.println("Bye bye!"); 
+            MainView.welcome();
+        }
+        else if (option == 1) {
+            ManagerView.seeNews();
+        } 
+        else if (option == 2) {
+            viewStudentsInMyCourses(loggedInTeacher);  // Call the method to show students
+        } 
+        else {
+            System.out.println("Invalid option, try again.");
+            welcome(loggedInTeacher);  // Recurse until a valid option is chosen
+        }
+    }
+
+    public static void viewStudentsInMyCourses(Teacher teacher) {
+        boolean foundCourse = false;
+
+        // Проходим по всем курсам
+        for (Course course : UserController.getAllCourses()) {
+            // Проверяем, преподает ли этот преподаватель данный курс
+            if (course.getCourseTeacher().equals(teacher.getUsername())) {
+                foundCourse = true;
+                System.out.println("Студенты на курсе: " + course.getCourseName());
+
+                // Флаг для проверки, есть ли зарегистрированные студенты
+                boolean courseHasStudents = false;
+
+                // Проходим по всем регистрациям и выводим студентов для текущего курса
+                for (Register register : DBContext.registerList) {
+                    // Отладочное сообщение: проверяем регистрацию для данного курса
+                    System.out.println("Проверка регистрации для курса ID: " + course.getCourseId());
+
+                    if (register.getCourse().getCourseId().equals(course.getCourseId())) {
+                        Student student = register.getStudent();
+                        // Отладочное сообщение: выводим информацию о студенте
+                        System.out.println("Найден студент: " + student.getUsername());
+                        System.out.println("Студент: " + student.getUsername());
+                        courseHasStudents = true;
+                    }
+                }
+
+                // Если для курса нет студентов
+                if (!courseHasStudents) {
+                    System.out.println("На этот курс еще никто не зарегистрировался.");
+                }
+
+                System.out.println("------------------------");
+            }
+        }
+
+        // Если преподаватель не ведет ни одного курса
+        if (!foundCourse) {
+            System.out.println("Вы не преподаете ни одного курса.");
+        }
+
+        // Возвращаемся в главное меню
+        welcome(teacher);  
+    }
+}

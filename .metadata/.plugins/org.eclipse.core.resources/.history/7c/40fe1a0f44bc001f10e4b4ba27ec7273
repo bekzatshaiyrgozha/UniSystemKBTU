@@ -1,0 +1,191 @@
+package DLL;
+import java.io.File;
+import java.util.*;
+import Users.*;
+import Utils.News;
+import Utils.Course;
+import Utils.Register;
+
+public class DBContext {
+    
+    private static String fullPath = "/home/xan001/UniSystemKBTU/UniversitySystem/src/Data/"; 
+    private static DBContext db = new DBContext();
+
+    public static Vector<Teacher> teacher;
+    public static Vector<Student> student;
+    public static Vector<Manager> manager;
+    public static Vector<News> newsList;
+    public static Vector<Course> courseList;
+    public static Vector<Register> registerList; // List to hold registrations
+
+    static {
+        teacher = getTeachers();
+        student = getStudents();
+        manager = getManagers(); 
+        newsList = getNews(); 
+        courseList = getCourse();
+        registerList = getRegistrations(); // Load registrations from file
+    }
+
+    private DBContext() {}
+
+    // Method to get all students from file
+    public static Vector<Student> getStudents() {
+        String filePath = fullPath + "students.txt";
+        File file = new File(filePath);
+
+        if (!file.exists() || file.length() == 0) {
+            System.out.println("File is empty or does not exist, returning an empty list.");
+            return new Vector<>();
+        }
+        Object o = ReaderWriter.deserialize(filePath);
+        if (o instanceof Vector) {
+            return (Vector<Student>) o;
+        }
+        return new Vector<>();
+    }
+
+    // Method to get all teachers from file
+    public static Vector<Teacher> getTeachers() {
+        String filePath = fullPath + "teachers.txt";
+        File file = new File(filePath);
+
+        if (!file.exists() || file.length() == 0) {
+            System.out.println("File is empty or does not exist, returning an empty list.");
+            return new Vector<>();
+        }
+        Object o = ReaderWriter.deserialize(filePath);
+        if (o instanceof Vector) {
+            return (Vector<Teacher>) o;
+        }
+        return new Vector<>();
+    }
+
+    // Method to get all managers from file
+    public static Vector<Manager> getManagers() {
+        String filePath = fullPath + "manager.txt";
+        File file = new File(filePath);
+
+        if (!file.exists() || file.length() == 0) {
+            System.out.println("File is empty or does not exist, returning an empty list.");
+            return new Vector<>();
+        }
+        Object o = ReaderWriter.deserialize(filePath);
+        if (o instanceof Vector) {
+            return (Vector<Manager>) o;
+        }
+        return new Vector<>();
+    }
+
+    // Method to get all news from file
+    public static Vector<News> getNews() {
+        String filePath = fullPath + "news.txt";
+        File file = new File(filePath);
+
+        if (!file.exists() || file.length() == 0) {
+            System.out.println("File is empty or does not exist, returning an empty list.");
+            return new Vector<>();
+        }
+        Object o = ReaderWriter.deserialize(filePath);
+        if (o instanceof Vector) {
+            return (Vector<News>) o;
+        }
+        return new Vector<>();
+    }
+
+    // Method to get all courses from file
+    public static Vector<Course> getCourse() {
+        String filePath = fullPath + "course.txt";
+        File file = new File(filePath);
+
+        if (!file.exists() || file.length() == 0) {
+            System.out.println("File is empty or does not exist, returning an empty list.");
+            return new Vector<>();
+        }
+        Object o = ReaderWriter.deserialize(filePath);
+        if (o instanceof Vector) {
+            return (Vector<Course>) o;
+        }
+        return new Vector<>();
+    }
+
+    // Method to get all registrations from file
+    public static Vector<Register> getRegistrations() {
+        String filePath = fullPath + "register.txt";
+        File file = new File(filePath);
+
+        if (!file.exists() || file.length() == 0) {
+            System.out.println("File is empty or does not exist, returning an empty list.");
+            return new Vector<>();
+        }
+        Object o = ReaderWriter.deserialize(filePath);
+        if (o instanceof Vector) {
+            return (Vector<Register>) o;
+        }
+        return new Vector<>();
+    }
+
+    // Method to save all teachers to file
+    public static boolean saveTeachers() {
+        return ReaderWriter.serialize(teacher, fullPath + "teachers.txt");
+    }
+
+    // Method to save all students to file
+    public static boolean saveStudents() {
+        return ReaderWriter.serialize(student, fullPath + "students.txt");
+    }
+
+    // Method to save all managers to file
+    public static boolean saveManagers() {
+        return ReaderWriter.serialize(manager, fullPath + "manager.txt");
+    }
+
+    // Method to save all news to file
+    public static boolean saveNews() {
+        return ReaderWriter.serialize(newsList, fullPath + "news.txt");
+    }
+
+    // Method to save all courses to file
+    public static boolean saveCourse() {
+        return ReaderWriter.serialize(courseList, fullPath + "course.txt");
+    }
+
+    // Method to save all registrations to file
+    public static boolean saveRegistrations() {
+        return ReaderWriter.serialize(registerList, fullPath + "register.txt");
+    }
+
+    // Method to add news to the list and save it
+    public static void addNews(News news) {
+        newsList.add(news);
+        saveNews();
+    }
+
+    // Method to add course to the list and save it
+    public static void addCourse(Course course) {
+        courseList.add(course);
+        saveCourse();
+    }
+
+    // Method to register a student for a course and save the registration
+    public static void addRegistration(Student student, Course course) {
+        Register newRegister = new Register(student, course); // Corrected: creating a new Register object
+        registerList.add(newRegister);
+        saveRegistrations(); // Save the updated registrations
+    }
+
+    // Method to get all users (teachers, students, managers)
+    public static Vector<User> getAllUsers() {
+        Vector<User> allUsers = new Vector<>();
+        allUsers.addAll(teacher);
+        allUsers.addAll(student);
+        allUsers.addAll(manager);
+        return allUsers;
+    }
+
+    // Method to register a student for a course
+    public static void registerStudentForCourse(Student student, Course course) {
+        addRegistration(student, course);
+        System.out.println("Student " + student.getName() + " has been successfully registered for course " + course.getCourseName());
+    }
+}

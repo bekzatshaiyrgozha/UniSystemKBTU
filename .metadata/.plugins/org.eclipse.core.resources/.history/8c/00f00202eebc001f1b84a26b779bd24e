@@ -1,0 +1,93 @@
+package Controllers;
+import java.util.*;
+
+import DLL.DBContext;
+import Enumerations.UserType;
+import Users.*;
+import Utils.Course;
+import Utils.News;
+import Utils.Register;
+
+public class UserController {
+
+    // Optimized method to authorize users based on file name and username/password
+    public static boolean authorize(String fileName, String username, String password) {
+        Vector<? extends User> users = null;
+
+        // Fetch the users list based on the file name (user type)
+        switch (fileName) {
+            case "teacher.txt":
+                users = DBContext.getTeachers();
+                break;
+            case "students.txt":
+                users = DBContext.getStudents();
+                break;
+            case "managers.txt":
+                users = DBContext.getManagers();
+                break;
+            default:
+                return false;
+        }
+
+        // Check if user exists and credentials match
+        for (User u : users) {
+            if (u.getUsername().equals(username) && u.getPassword().equals(password)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    // Get student by username
+    public static Student getStudentByUsername(String username) {
+        return DBContext.getStudents().stream()
+            .filter(student -> student.getUsername().equals(username))
+            .findFirst()
+            .orElse(null);  // Return null if student not found
+    }
+
+    // Get all registrations
+    public static Vector<Register> getAllRegistrations() {
+        return DBContext.registerList;
+    }
+
+    // Add a registration to a course
+    public static void addRegistration(Student student, Course course) {
+        Register register = new Register(student, course);
+        DBContext.addRegister(register);
+    }
+
+    // General method to fetch users by type (teacher, student, manager)
+    public static Vector<? extends User> getUsers(UserType type) {
+        switch (type) {
+            case TEACHER:
+                return DBContext.getTeachers();
+            case STUDENT:
+                return DBContext.getStudents();
+            case MANAGER:
+                return DBContext.getManagers();
+            default:
+                return new Vector<>();
+        }
+    }
+
+    // Get all users combined
+    public static Vector<User> getAllUsers() {
+        Vector<User> allUsers = new Vector<>();
+        allUsers.addAll(DBContext.getTeachers());
+        allUsers.addAll(DBContext.getStudents());
+        allUsers.addAll(DBContext.getManagers());
+        return allUsers;
+    }
+
+    // Get all news
+    public static Vector<News> getAllNews() {
+        return DBContext.getDb().getNews();
+    }
+
+    // Get all courses
+    public static Vector<Course> getAllCourses() {
+        return DBContext.getDb().getCourse();
+    }
+}

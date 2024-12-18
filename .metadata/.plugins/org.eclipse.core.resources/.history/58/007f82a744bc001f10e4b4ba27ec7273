@@ -1,0 +1,85 @@
+package Controllers;
+
+import java.util.*;
+
+import DLL.DBContext;
+import Enumerations.UserType;
+import Users.*;
+import Utils.Course;
+import Utils.News;
+
+public class UserController {
+
+    // Метод для аутентификации пользователя
+    public static boolean authorize(String fileName, String username, String password) {
+        Vector<?> users = getUsersFromFile(fileName);
+
+        if (users == null) return false;
+
+        // Ищем пользователя по имени и паролю
+        for (User u : users) {
+            if (u.getUsername().equals(username) && u.getPassword().equals(password)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // Метод для получения пользователей по типу
+    private static Vector<? extends User> getUsersFromFile(String fileName) {
+        switch (fileName) {
+            case "teacher.txt":
+                return DBContext.getTeachers();
+            case "students.txt":
+                return DBContext.getStudents();
+            case "managers.txt":
+                return DBContext.getManagers();
+            default:
+                return null;
+        }
+    }
+
+    // Метод для получения всех пользователей
+    public static Vector<User> getAllUsers() {
+        Vector<User> allUsers = new Vector<>();
+        allUsers.addAll(DBContext.getTeachers());
+        allUsers.addAll(DBContext.getStudents());
+        allUsers.addAll(DBContext.getManagers());
+        return allUsers;
+    }
+
+    // Метод для получения всех новостей
+    public static Vector<News> getAllNews() {
+        return DBContext.getDb().getNews();
+    }
+
+    // Метод для получения всех курсов
+    public static Vector<Course> getAllCourses() {
+        return DBContext.getDb().getCourse();
+    }
+
+    // Метод для поиска студента по имени пользователя
+    public static Student getStudentByUsername(String username) {
+        Vector<Student> students = DBContext.getStudents();
+        for (Student student : students) {
+            if (student.getUsername().equals(username)) {
+                return student;
+            }
+        }
+        return null;  // Возвращаем null, если студент не найден
+    }
+
+    // Универсальный метод для получения всех пользователей по типу
+    public static Vector<?> getUsers(UserType type) {
+        switch (type) {
+            case TEACHER:
+                return DBContext.getTeachers();
+            case STUDENT:
+                return DBContext.getStudents();
+            case MANAGER:
+                return DBContext.getManagers();
+            default:
+                return new Vector<>();
+        }
+    }
+}

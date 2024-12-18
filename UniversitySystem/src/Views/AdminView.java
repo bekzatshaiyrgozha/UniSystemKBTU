@@ -4,6 +4,8 @@ import java.util.Scanner;
 
 import Controllers.AdminController;
 import Controllers.UserController;
+import Enumerations.Faculty;
+import Enumerations.SemesterType;
 import Enumerations.UserType;
 
 public class AdminView {
@@ -93,7 +95,7 @@ public class AdminView {
 			String password = in.nextLine();
 			
 			// controller
-			boolean res = AdminController.addUser(username, password, UserType.TEACHER);
+			boolean res = AdminController.addUser(username, password  ,UserType.TEACHER,null, option);
 			
 			if (res) {
 				System.out.println(username + " is created!");
@@ -108,8 +110,59 @@ public class AdminView {
 			String username = in.nextLine();
 			System.out.println("Enter a password:");
 			String password = in.nextLine();
+			System.out.println("Select faculty"); 
+			System.out.println("1.Fit"); 
+			System.out.println("2.BS"); 
+			System.out.println("3.Sepi"); 
+			System.out.println("Options"); 
+			int facultyoption = in.nextInt();
 			
-			boolean res = AdminController.addUser(username, password, UserType.STUDENT); 
+			Faculty faculty = null;
+
+		    switch (facultyoption) {
+		    	case 1:
+		    		faculty = Faculty.FIT;
+		    		break;
+		    	case 2:
+		    		faculty = Faculty.BS;
+		    		break;
+		    	case 3:
+		    		faculty = Faculty.SEPI;
+		    		break;
+		    	default:
+		    		System.out.println("Invalid faculty options");
+		    		return;
+		    }
+		    
+	        System.out.println("Select study year:");
+	        System.out.println("1. First Year");
+	        System.out.println("2. Second Year");
+	        System.out.println("3. Third Year");
+	        System.out.println("4. Fourth Year");
+	        System.out.print("Option: ");
+	        int yearOption = in.nextInt();
+	        int studyYear = 0;
+
+	        switch (yearOption) {
+	            case 1:
+	                studyYear = 1;
+	                break;
+	            case 2:
+	                studyYear = 2;
+	                break;
+	            case 3:
+	                studyYear = 3;
+	                break;
+	            case 4:
+	                studyYear = 4;
+	                break;
+	            default:
+	                System.out.println("Invalid year option");
+	                return;  // Выход из метода при неверном выборе
+	        }
+
+			
+			boolean res = AdminController.addUser(username, password,UserType.STUDENT, faculty, studyYear ); 
 			
 			if(res) {
 				System.out.println(username + " is created!"); 
@@ -126,7 +179,7 @@ public class AdminView {
 			System.out.println("Enter a password:");
 			String password = in.nextLine();
 
-			boolean res = AdminController.addUser(username, password, UserType.MANAGER); 
+			boolean res = AdminController.addUser(username, password, UserType.MANAGER,null,option); 
 			
 			if(res) {
 				System.out.println(username + " is created!"); 

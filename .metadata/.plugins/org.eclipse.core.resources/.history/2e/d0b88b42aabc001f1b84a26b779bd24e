@@ -1,0 +1,64 @@
+package Views;
+
+import java.util.Scanner;
+import Users.Student;
+import Utils.Course;
+import Controllers.UserController;
+
+public class StudentView {
+    static Scanner in = new Scanner(System.in); 
+
+    public static void welcome(Student loggedInStudent) {
+        System.out.println("\nWelcome to WSP, " + loggedInStudent.getUsername() + "!");
+        System.out.println("Please select an option:");
+        System.out.println("0. Exit");
+        System.out.println("1. See all news");
+        System.out.println("7. View My Profile");
+        System.out.println("8. Register for a Course");
+
+        int option = in.nextInt();
+        in.nextLine();  
+
+        if (option == 0) {
+            System.out.println("Bye bye!");
+            MainView.welcome();
+        } 
+        else if (option == 1) {
+            ManagerView.seeNews();
+        } 
+        else if (option == 7) {
+            myProfile(loggedInStudent);  
+        }
+        else if (option == 8) {
+        	registerForCourse(loggedInStudent);
+        }
+        else {
+            System.out.println("Invalid option. Please try again.");
+            welcome(loggedInStudent);  
+        }
+    }
+
+    public static void myProfile(Student student) {
+        System.out.println("\n--- Student Profile ---");
+        System.out.println("Username: " + student.getUsername());
+        System.out.println("Faculty: " + student.getFaculty());
+        System.out.println("Semester: " + student.getstudyYear());
+        System.out.println("-----------------------");
+        welcome(student);
+
+    }
+    public static void registerForCourse(Student student) {
+        System.out.println("Student Faculty: " + student.getFaculty());
+        System.out.println("Student Semester: " + student.getstudyYear());
+        System.out.println("Available Courses:");
+        for (Course course : UserController.getAllCourses()) {
+            System.out.println("Course Faculty: " + course.getFaculty() + ", Semester: " + course.getSemester());
+            if (course.getFaculty().equals(student.getFaculty()) && course.getstudyYear().equals(student.getstudyYear())) {
+                System.out.println(course);
+            }
+        }
+        welcome(student);
+    }
+
+}
+    

@@ -1,0 +1,39 @@
+package Users;
+import Enumerations.Faculty;
+import Enumerations.RegistrationStatus;
+
+public class Student extends User {
+	private Faculty faculty;
+	private String studentId;
+	private RegistrationStatus registrationStatus;
+
+	public Student(String username, String password, String studenId, Faculty faculty, RegistrationStatus registrationStatus ) {
+		super(username, password);
+		this.studentId = studentId;
+		this.faculty = faculty;
+		this.registrationStatus = registrationStatus.APPROVE;
+	}
+	
+	public Faculty getFaculty() {
+		return faculty;
+	}
+	public void setFaculty() {
+		this.faculty = faculty;
+	}
+	
+	public Faculty getStudenId() {
+		return studentId;
+	}
+	public void setStudentId() {
+		this.studentId = studentId;
+	}
+	
+	public registrationStatus getregistrationStatus() {
+		return registrationStatus;
+	}
+	public void setregistrationStatus() {
+		this.registrationStatus = registrationStatus;
+	}
+	
+
+}

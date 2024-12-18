@@ -1,0 +1,31 @@
+package Users;
+import Enumerations.Faculty;
+import Enumerations.RegistrationStatus;
+import Enumerations.SemesterType;
+
+public class Student extends User {
+	private static Faculty faculty;
+	private static SemesterType semester;
+
+	public Student(String username, String password,Faculty faculty) {
+		super(username, password);
+		this.faculty = faculty;
+	}
+	
+	public Faculty getFaculty() {
+		return faculty;
+	}
+	
+	public SemesterType getsemester() {
+		return semester;
+	}
+	public void setFaculty() {
+		this.faculty = faculty;
+	}
+	
+
+	
+
+	
+
+}

@@ -1,0 +1,65 @@
+package Views;
+
+import java.util.Scanner;
+import Controllers.UserController;
+import Utils.Course;
+import Utils.Register;
+import Users.Teacher;
+import Users.Student;
+
+public class TeacherView {
+    static Scanner in = new Scanner(System.in); 
+
+    public static void welcome(Teacher loggedInTeacher) {
+        System.out.println("Welcome to WSP, " + loggedInTeacher.getUsername() + "!");
+        System.out.println("Please select an option:");
+        System.out.println("0. Exit");
+        System.out.println("1. See all news");
+        System.out.println("2. View students in my courses");
+        int option = in.nextInt();
+        in.nextLine();  // Consume the newline
+
+        if (option == 0) {
+            System.out.println("Bye bye!"); 
+            MainView.welcome();
+        }
+        else if (option == 1) {
+            ManagerView.seeNews();
+        } 
+        else if (option == 2) {
+            viewStudentsInMyCourses(loggedInTeacher);  // Call the method to show students
+        } 
+        else {
+            System.out.println("Invalid option, try again.");
+            welcome(loggedInTeacher);  // Recurse until a valid option is chosen
+        }
+    }
+
+    // Method to show students in the courses taught by the teacher
+    public static void viewStudentsInMyCourses(Teacher teacher) {
+        // Get all the courses the teacher is teaching
+        boolean foundCourse = false;
+        for (Course course : UserController.getAllCourses()) {
+            // Check if the teacher is teaching this course
+            if (course.getCourseTeacher().equals(teacher.getUsername())) {
+                foundCourse = true;
+                System.out.println("Students in course: " + course.getCourseName());
+                
+                // Loop through all registrations and show students in this course
+                for (Register register : DBContext.registerList) {
+                    if (register.getCourse().getCourseId().equals(course.getCourseId())) {
+                        Student student = register.getStudent();
+                        System.out.println("Student: " + student.getUsername());
+                    }
+                }
+                System.out.println("------------------------");
+            }
+        }
+        
+        if (!foundCourse) {
+            System.out.println("You are not teaching any courses.");
+        }
+        
+        welcome(teacher);  // Returning to the main menu after displaying the students
+    }
+}

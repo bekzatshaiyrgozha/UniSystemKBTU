@@ -1,0 +1,80 @@
+package Views;
+
+import java.util.Scanner;
+import Controllers.UserController;
+import Users.Student;
+import Enumerations.Faculty;
+import Enumerations.SemesterType;
+
+public class StudentView {
+    static Scanner in = new Scanner(System.in); 
+
+    // This will hold the current logged-in student object
+    private static Student loggedInStudent;
+
+    public static void welcome() {
+        // Prompt for username and password
+        System.out.println("Please log in to view your profile.");
+        System.out.print("Username: ");
+        String username = in.nextLine();
+
+        System.out.print("Password: ");
+        String password = in.nextLine();
+
+        // Try to authenticate and get the student profile
+        if (UserController.authorize("students.txt", username, password)) {
+            loggedInStudent = UserController.getStudentByUsername(username);
+
+            if (loggedInStudent != null) {
+                // Successful login, show menu
+                showMenu();
+            } else {
+                System.out.println("No student found with that username.");
+                welcome();  // Retry login if student is not found
+            }
+        } else {
+            System.out.println("Invalid username or password. Please try again.");
+            welcome();  // Retry login if authentication fails
+        }
+    }
+
+    public static void showMenu() {
+        System.out.println("\nWelcome to WSP, " + loggedInStudent.getUsername() + "!");
+        System.out.println("Please select an option:");
+        System.out.println("0. Exit");
+        System.out.println("1. See all news");
+        System.out.println("7. View My Profile");
+
+        int option = in.nextInt();
+        in.nextLine();  // Clear the buffer
+
+        if (option == 0) {
+            System.out.println("Bye bye!"); 
+            MainView.welcome();
+        } 
+        else if (option == 1) {
+            ManagerView.seeNews();
+        } 
+        else if (option == 7) {
+            myProfile(loggedInStudent);
+        }
+        else {
+            System.out.println("Invalid option. Please try again.");
+            showMenu();
+        }
+    }
+
+    public static void myProfile(Student student) {
+        // Display the student's profile
+        System.out.println("\n--- Student Profile ---");
+        System.out.println("Username: " + student.getUsername());
+        System.out.println("Faculty: " + student.getFaculty());
+        System.out.println("Semester: " + student.getSemester());
+        System.out.println("-----------------------");
+    }
+
+    public static void main(String[] args) {
+        // Test the welcome method, which will now handle login
+        welcome();
+    }
+}

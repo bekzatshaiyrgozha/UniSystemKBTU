@@ -7,7 +7,6 @@ import java.util.Date;
 
 //class Lesson
 public class Lesson {
-    private Course course;
     private Users.Teacher teacher;
     private SortedSet<Users.Student> students;
     private Date startHour;
@@ -15,7 +14,6 @@ public class Lesson {
     private LessonType type;
 
     public Lesson(Course course, Users.Teacher teacher, SortedSet<Users.Student> students, Date startHour, Date endHour, LessonType type) {
-        this.course = course;
         this.startHour = startHour;
         this.endHour = endHour;
         this.type = type;
