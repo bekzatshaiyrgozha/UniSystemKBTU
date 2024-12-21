@@ -5,10 +5,13 @@ import java.util.Vector;
 
 import Controllers.ManagerController;
 import Controllers.UserController;
+import DLL.DBContext;
 import Enumerations.Faculty;
 import Utils.News;
+import Utils.Request;
 import Utils.Course;
 import Users.Employee;
+import Users.Student;
 
 public class ManagerView
  {
@@ -23,6 +26,8 @@ private static Scanner in = new Scanner(System.in);
         System.out.println("- 3. Create course");;
         System.out.println("- 4. See all course");
         System.out.println("- 5. Is gived salary");
+        System.out.println("- 6. View requests"); 
+        System.out.println("- 7. View Researchers"); 
         System.out.print("\nOption: ");
         int option = in.nextInt();
         
@@ -40,9 +45,14 @@ private static Scanner in = new Scanner(System.in);
           else if (option == 4){
         	  seecourse();
         }
-          else if (option == 5){
+        else if (option == 5){
         	  isGiveSalary(); 
-            }
+        }else if(option == 6) {
+        	viewRequests(); 
+        }else if(option == 7) {
+        	viewResearchers(); 
+        }
+        
           else
         {
             System.out.println("Invalid option, try again.");
@@ -50,7 +60,60 @@ private static Scanner in = new Scanner(System.in);
         }
     }
 
-    public static void isGiveSalary() {
+    private static void viewRequests() {
+    	 Vector<Request> requests = ManagerController.getAllRequests();
+
+    	    if (requests.isEmpty()) {
+    	        System.out.println("No requests found.");
+    	    } else {
+    	        for (Request request : requests) {
+    	            System.out.println(request);
+    	            System.out.println("----------------------");
+    	        }
+    	    }
+
+    	    System.out.println("Enter the request index to process, or -1 to return:");
+    	    int index = in.nextInt();
+    	    in.nextLine(); // Consume the newline
+
+    	    if (index >= 0 && index < requests.size()) {
+    	        Request request = requests.get(index);
+
+    	        System.out.println("1. Approve");
+    	        System.out.println("2. Reject");
+    	        System.out.print("Option: ");
+    	        int option = in.nextInt();
+
+    	        if (option == 1) {
+    	            ManagerController.processRequest(request, true);
+    	            DBContext.getStudentsResearchers().add(request.getStudent()); // Add to researchers list
+    	            System.out.println("Request approved.");
+    	        } else if (option == 2) {
+    	            ManagerController.processRequest(request, false);
+    	            System.out.println("Request rejected.");
+    	        } else {
+    	            System.out.println("Invalid option.");
+    	        }
+    	    }
+    	    
+    	    welcome();
+		
+	}
+    public static void viewResearchers() {
+        Vector<Student> researchers = DBContext.getStudentsResearchers();  // Получаем список исследователей
+
+        if (researchers.isEmpty()) {
+            System.out.println("No researchers found.");
+        } else {
+            System.out.println("List of researchers:");
+            for (Student student : researchers) {
+                System.out.println(student.getUsername() + " - Faculty: " + student.getFaculty());
+            }
+        }
+
+        welcome();  // Возвращаемся в меню
+    }
+	public static void isGiveSalary() {
     	if(Employee.isSalaryPaid()) {
     		System.out.println("Gived salary.");
     		

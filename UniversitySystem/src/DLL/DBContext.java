@@ -5,9 +5,10 @@ import Users.*;
 import Utils.News; 
 import Utils.Course;
 import Utils.Register;
+import Utils.Request;
 public class DBContext {
 	
-	private static String fullPath = "/Users/bekzatshaiyrgozha/Desktop/UniSystemKBTU/UniversitySystem/src/Data/" ; 
+	private static String fullPath = "C:\\Users\\Asus\\Desktop\\UniSystemKBTU\\UniversitySystem\\src\\Data\\" ; 
 	private static DBContext db = new DBContext();
 	
 	public static Vector<Teacher> teacher;
@@ -16,7 +17,11 @@ public class DBContext {
 	public static Vector<News> newsList ; 
 	public static Vector<Course> courseList;
     public static Vector<Register> registerList;  
-	{
+    public static Vector<Request> requests = new Vector<>(); 
+    private static Vector<Student> studentsResearchers = new Vector<>();
+
+    
+    {
 		this.teacher = getTeachers();
 		this.student = getStudents() ; 
 		this.manager = getManagers() ; 
@@ -29,7 +34,16 @@ public class DBContext {
 		
 	}
 	
-	// ...
+	public static void addRequest(Request request) {
+        requests.add(request);
+    }
+
+    public static Vector<Request> getRequests() {
+        return requests;
+    }
+    public static Vector<Student> getStudentsResearchers() {
+        return studentsResearchers;
+    }
 	public static Vector<Student> getStudents(){
 		String filePath = fullPath + "students.txt" ; 
 		File file = new File(filePath) ; 
@@ -145,6 +159,9 @@ public class DBContext {
 	}
 	public static boolean saveCourse() {
 		return ReaderWriter.serialize(courseList, fullPath+ "course.txt");
+	}
+	public static void addStudentToResearchers(Student student) {
+		studentsResearchers.add(student); 
 	}
 	public static void addNews(News news) {
 		newsList.add(news); 

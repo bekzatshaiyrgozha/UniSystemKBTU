@@ -4,6 +4,7 @@ import java.util.Scanner;
 import Users.Student;
 import Utils.Course;
 import Utils.Register;
+import Utils.Request;
 import Controllers.UserController;
 import DLL.DBContext;
 
@@ -30,7 +31,7 @@ public class StudentView {
             ManagerView.seeNews();
         } 
         else if (option == 2) {
-        	sendRequest(); 
+        	sendRequest(loggedInStudent); 
         }
         else if (option == 7) {
             myProfile(loggedInStudent);  
@@ -43,8 +44,15 @@ public class StudentView {
             welcome(loggedInStudent);  
         }
     }
-    public static void sendRequest() {
-    	
+    public static void sendRequest(Student student) {
+    	System.out.println("Enter your request description:");
+        String description = in.nextLine();
+
+        Request request = new Request(student, description);
+        DBContext.addRequest(request);
+
+        System.out.println("Your request has been sent!");
+        welcome(student);
     }
     public static void myProfile(Student student) {
         System.out.println("\n--- Student Profile ---");

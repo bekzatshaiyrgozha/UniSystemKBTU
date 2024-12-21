@@ -1,10 +1,13 @@
 package Controllers;
 
+import java.util.Vector;
+
 import DLL.DBContext;
 import Enumerations.Faculty;
 import Enumerations.SemesterType;
 import Users.Employee;
 import Utils.News;
+import Utils.Request;
 import Utils.Course;
 import Users.Manager;
 import Users.Teacher;
@@ -21,7 +24,18 @@ public class ManagerController {
 		DBContext.addNews(news);
 		return true; 
 	}
-	
+	 public static Vector<Request> getAllRequests() {
+	        return DBContext.getRequests();
+	    }
+
+	    public static void processRequest(Request request, boolean approve) {
+	    	if (approve) {
+	            request.approve();
+	            DBContext.addStudentToResearchers(request.getStudent());  // Добавление студента в список исследователей
+	        } else {
+	            request.reject();
+	        }
+	    }
 	public static void createCourse(String courseId, String courseName, String courseTeacher, 
             int studyYear, Faculty faculty) {
     Course course = new Course(courseId, courseName, courseTeacher, studyYear, faculty);
