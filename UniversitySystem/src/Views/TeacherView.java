@@ -7,7 +7,7 @@ import Utils.Course;
 import Utils.Register;
 import Users.Teacher;
 import Users.Student;
-
+import Users.Employee; 
 public class TeacherView {
     static Scanner in = new Scanner(System.in); 
 
@@ -17,6 +17,7 @@ public class TeacherView {
         System.out.println("0. Exit");
         System.out.println("1. See all news");
         System.out.println("2. View students in my courses");
+        System.out.println("3. Is salary gived");
         int option = in.nextInt();
         in.nextLine();  
 
@@ -29,6 +30,9 @@ public class TeacherView {
         } 
         else if (option == 2) {
             viewStudentsInMyCourses(loggedInTeacher);  
+        } 
+        else if (option == 3) {
+        	isGiveSalary(loggedInTeacher); 
         } 
         else {
             System.out.println("Invalid option, try again.");
@@ -68,5 +72,14 @@ public class TeacherView {
         }
 
         welcome(teacher);  
+    }
+    public static void isGiveSalary(Teacher teacher) {
+    	if(Employee.isSalaryPaid()) {
+    		System.out.println("Gived salary.");
+    		
+    	}else {
+    		System.out.println("Not gived salary.");
+    	} 
+    	welcome(teacher); 
     }
 }

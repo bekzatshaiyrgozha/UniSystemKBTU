@@ -11,7 +11,7 @@ public class AdminController {
 			int studyYear) {
 		switch(type) {
 		case TEACHER:
-			Teacher newTeacher = new Teacher(username, password);
+			Teacher newTeacher = new Teacher(username, password, false);
 			DBContext.teacher.add(newTeacher);
 			return DBContext.saveTeachers();
 		case STUDENT:
@@ -19,7 +19,7 @@ public class AdminController {
 	        DBContext.student.add(newStudent); 
 			return DBContext.saveStudents(); 
 		case MANAGER:
-			Manager newManager = new Manager(username, password);
+			Manager newManager = new Manager(username, password,false);
 			DBContext.manager.add(newManager); 
 			return DBContext.saveManagers(); 
 		default:

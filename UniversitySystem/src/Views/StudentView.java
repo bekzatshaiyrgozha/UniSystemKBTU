@@ -15,6 +15,7 @@ public class StudentView {
         System.out.println("Please select an option:");
         System.out.println("0. Exit");
         System.out.println("1. See all news");
+        System.out.println("2.Send request");
         System.out.println("7. View My Profile");
         System.out.println("8. Register for a Course");
 
@@ -28,6 +29,9 @@ public class StudentView {
         else if (option == 1) {
             ManagerView.seeNews();
         } 
+        else if (option == 2) {
+        	sendRequest(); 
+        }
         else if (option == 7) {
             myProfile(loggedInStudent);  
         }
@@ -39,7 +43,9 @@ public class StudentView {
             welcome(loggedInStudent);  
         }
     }
-
+    public static void sendRequest() {
+    	
+    }
     public static void myProfile(Student student) {
         System.out.println("\n--- Student Profile ---");
         System.out.println("Username: " + student.getUsername());

@@ -1,0 +1,17 @@
+package Users;
+
+
+public abstract class Employee extends User {
+	protected boolean salaryPaid;
+	public Employee(String username, String password,boolean salaryPaid) {
+		super(username, password);
+		this.salaryPaid = false;
+	}
+	public boolean isSalaryPaid() {
+		return salaryPaid;
+	}
+	public void setSalaryPaid() {
+		this.salaryPaid = true;
+	}
+
+}

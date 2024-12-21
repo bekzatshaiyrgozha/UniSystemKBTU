@@ -1,0 +1,5 @@
+package Utils;
+
+public class Salary {
+	public static double budjet = 10000000; 
+}

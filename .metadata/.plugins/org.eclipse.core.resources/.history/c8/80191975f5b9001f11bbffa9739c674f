@@ -1,7 +1,0 @@
-package Views;
-
-public class StudentView {
-	public static void main(String[] args) {
-		System.out.println("Welcome , student!") ;
-	}
-}

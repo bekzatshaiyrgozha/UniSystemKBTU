@@ -8,8 +8,10 @@ import Controllers.UserController;
 import Enumerations.Faculty;
 import Utils.News;
 import Utils.Course;
+import Users.Employee;
 
-public class ManagerView {
+public class ManagerView
+ {
 private static Scanner in = new Scanner(System.in);
     
 
@@ -20,6 +22,9 @@ private static Scanner in = new Scanner(System.in);
         System.out.println("- 2. See all news");
         System.out.println("- 3. Create course");;
         System.out.println("- 4. See all course");
+        System.out.println("- 5. Give salary");
+        System.out.println("- 6. See budjet");
+        System.out.println("- 7. Is gived salary");
         System.out.print("\nOption: ");
         int option = in.nextInt();
         
@@ -36,7 +41,16 @@ private static Scanner in = new Scanner(System.in);
         }
           else if (option == 4){
         	  seecourse();
+        }
+          else if (option == 5){
+          	giveSalary();
           }
+          else if (option == 6){
+        	  seeBudjet();
+            }
+          else if (option == 7){
+        	  isGiveSalary(); 
+            }
           else
         {
             System.out.println("Invalid option, try again.");
@@ -44,7 +58,17 @@ private static Scanner in = new Scanner(System.in);
         }
     }
 
-    
+    public static void isGiveSalary() {
+    	if(Employee.isSalaryPaid()) {
+    		System.out.println("Gived salary.");
+    		
+    		
+    	}else {
+    		System.out.println("Not geved salary.");
+    	}
+    	welcome();
+    	
+    }
     public static void createNews() {
         in.nextLine(); 
         
@@ -105,7 +129,7 @@ private static Scanner in = new Scanner(System.in);
                 break;
             default:
                 System.out.println("Invalid year option");
-                return;  // Выход из метода при неверном выборе
+                return;  
         }
 
 
@@ -173,5 +197,24 @@ private static Scanner in = new Scanner(System.in);
 
         welcome();  
     }
+    public static void giveSalary() {
+    	System.out.println("Loading prosedure...");
+    	ManagerController.giveSalary();
+    	welcome();
+    }
+    public static void seeBudjet() {
+    	System.out.println("Uni budjet:" + ManagerController.seeBudjet());
+    	
+    	welcome();
+    	
+    }
+//    public static void isGivedSalary() {
+//    	if(isSalaryPaid()) {
+//    		System.out.println("Salary is given!"); 
+//    	}
+//    	else {
+//    		System.out.println("Is salary is not given"); 
+//    	}
+//    }
 
 }

@@ -5,4 +5,9 @@
     <fullyQualifiedTypeName name="Enumerations.Faculty"/>
     <fullyQualifiedTypeName name="Enumerations.SemesterType"/>
     <fullyQualifiedTypeName name="Utils.Register"/>
+    <fullyQualifiedTypeName name="Utils.Salary"/>
+    <fullyQualifiedTypeName name="Users.Manager"/>
+    <fullyQualifiedTypeName name="Users.Teacher"/>
+    <fullyQualifiedTypeName name="Users.Employee"/>
+    <fullyQualifiedTypeName name="Users.Admin"/>
 </qualifiedTypeNameHistroy>
