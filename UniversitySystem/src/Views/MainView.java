@@ -17,6 +17,8 @@ public class MainView {
         System.out.println("1. Teacher");
         System.out.println("2. Manager");
         System.out.println("3. Student");
+        System.out.println("4. Finance Manager");
+        
         System.out.print("\nRole: ");
         int option = in.nextInt();
 
@@ -33,9 +35,30 @@ public class MainView {
             case 3:
                 authorize("students.txt", UserType.STUDENT);
                 break;
+            case 4:
+            	authorizeFinanceManager();
+            	break;
+            	
             default:
                 System.out.println("Invalid option!");
                 welcome();
+        }
+    }
+    
+    public static void authorizeFinanceManager() {
+    	System.out.println("Please, enter admin credentials:");
+        in.nextLine();  
+        System.out.print("Username: ");
+        String username = in.nextLine();
+        System.out.print("Password: ");
+        String password = in.nextLine();
+        FinanceManager admin = FinanceManager.getInstance();
+        if (admin.getUsername().equals(username) && admin.getPassword().equals(password)) {
+            System.out.println("Finance manager login successful!");
+            FinanceManagerView.welcome();
+        } else {
+            System.out.println("Invalid username or password, TRY AGAIN:(!");
+            welcome();
         }
     }
 

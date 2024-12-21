@@ -5,11 +5,11 @@ import Enumerations.Faculty;
 import Enumerations.SemesterType;
 import Users.Employee;
 import Utils.News;
-import Utils.Salary;
 import Utils.Course;
 import Users.Manager;
 import Users.Teacher;
 import Users.Admin;
+import Utils.FinanceOffice;
 
 public class ManagerController {
 	public static void createNews(String title , String content) {
@@ -34,27 +34,7 @@ public class ManagerController {
 		DBContext.addCourse(course);
 		return true; 
 	}
-	public static void giveSalary() {
-		int sum = DBContext.getManagers().size() * 200000 + DBContext.getTeachers().size() * 300000 + 400000;
-		if(Salary.budjet > 0 && Salary.budjet > sum) {
-			Salary.budjet -= sum;
-			System.out.println("Manager gived salary.");
-			for (Manager manager : DBContext.getManagers()) {
-				manager.setSalaryPaid();
-            }
-			for(Teacher teacher : DBContext.getTeachers()) {
-				teacher.setSalaryPaid();
-			}
-			
-			
-		}else {
-			System.out.println("Not enough money in the budget");
-		}
-	}
 	
-	public static double seeBudjet() {
-		return Salary.getBudjet();
-	}
 	
 	
 }

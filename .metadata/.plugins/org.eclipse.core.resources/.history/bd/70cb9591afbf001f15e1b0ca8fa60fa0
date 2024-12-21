@@ -1,0 +1,44 @@
+package Users;
+
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
+public abstract class Employee extends User {
+    private boolean salaryPaid;
+    private long lastSalaryPaidTime;
+    private ScheduledExecutorService scheduler;
+
+    public Employee(String username, String password,boolean salaryPaid) {
+        super(username, password);
+        this.salaryPaid = false;
+        this.lastSalaryPaidTime = System.currentTimeMillis();
+    }
+
+    public boolean isSalaryPaid() {
+        return salaryPaid;
+    }
+
+    public void setSalaryPaid() {
+        salaryPaid = true;
+        lastSalaryPaidTime = System.currentTimeMillis();
+        System.out.println("Salary paid for: " + getUsername());
+
+        scheduleSalaryReset();
+    }
+
+    private void scheduleSalaryReset() {
+        if (scheduler != null && !scheduler.isShutdown()) {
+            scheduler.shutdown();
+        }
+
+        scheduler = Executors.newScheduledThreadPool(1);
+        scheduler.schedule(() -> {
+            long currentTime = System.currentTimeMillis();
+            if (currentTime - lastSalaryPaidTime >= 90 * 1000) {
+                salaryPaid = false;
+                System.out.println("Salary status reset to false for: " + getUsername());
+            }
+        }, 90, TimeUnit.SECONDS); 
+    }
+}

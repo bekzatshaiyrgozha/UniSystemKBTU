@@ -1,0 +1,31 @@
+package Controllers;
+
+import DLL.DBContext;
+import Users.Manager;
+import Users.Teacher;
+import Utils.FinanceOffice;
+
+public class FinanceManagerController {
+	public static void giveSalary() {
+		int sum = DBContext.getManagers().size() * 200000 + DBContext.getTeachers().size() * 300000 + 400000 + 150000;
+		if(FinanceOffice.budjet > 0 && FinanceOffice.budjet > sum) {
+			FinanceOffice.budjet -= sum;
+			System.out.println("Manager gived salary.");
+			for (Manager manager : DBContext.getManagers()) {
+				manager.setSalaryPaid();
+            }
+			for(Teacher teacher : DBContext.getTeachers()) {
+				teacher.setSalaryPaid();
+			}
+			
+			
+		}else {
+			System.out.println("Not enough money in the budget");
+		}
+	}
+	
+	public static double seeBudjet() {
+		return FinanceOffice.getBudjet();
+	}
+
+}

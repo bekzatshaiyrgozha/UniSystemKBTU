@@ -10,4 +10,7 @@
     <fullyQualifiedTypeName name="Users.Teacher"/>
     <fullyQualifiedTypeName name="Users.Employee"/>
     <fullyQualifiedTypeName name="Users.Admin"/>
+    <fullyQualifiedTypeName name="Users.FinanceManager"/>
+    <fullyQualifiedTypeName name="Utils.FinanceOffice"/>
+    <fullyQualifiedTypeName name="Controllers.FinanceManagerController"/>
 </qualifiedTypeNameHistroy>

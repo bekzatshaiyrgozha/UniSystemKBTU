@@ -22,9 +22,7 @@ private static Scanner in = new Scanner(System.in);
         System.out.println("- 2. See all news");
         System.out.println("- 3. Create course");;
         System.out.println("- 4. See all course");
-        System.out.println("- 5. Give salary");
-        System.out.println("- 6. See budjet");
-        System.out.println("- 7. Is gived salary");
+        System.out.println("- 5. Is gived salary");
         System.out.print("\nOption: ");
         int option = in.nextInt();
         
@@ -43,12 +41,6 @@ private static Scanner in = new Scanner(System.in);
         	  seecourse();
         }
           else if (option == 5){
-          	giveSalary();
-          }
-          else if (option == 6){
-        	  seeBudjet();
-            }
-          else if (option == 7){
         	  isGiveSalary(); 
             }
           else
@@ -197,24 +189,6 @@ private static Scanner in = new Scanner(System.in);
 
         welcome();  
     }
-    public static void giveSalary() {
-    	System.out.println("Loading prosedure...");
-    	ManagerController.giveSalary();
-    	welcome();
-    }
-    public static void seeBudjet() {
-    	System.out.println("Uni budjet:" + ManagerController.seeBudjet());
-    	
-    	welcome();
-    	
-    }
-//    public static void isGivedSalary() {
-//    	if(isSalaryPaid()) {
-//    		System.out.println("Salary is given!"); 
-//    	}
-//    	else {
-//    		System.out.println("Is salary is not given"); 
-//    	}
-//    }
+    
 
 }
