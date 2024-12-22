@@ -27,7 +27,7 @@ public class Student extends User {
 	}
 	
 	public String toString() {
-        return "Student{username='" + getUsername() + "', faculty=" + faculty + ", studyYear=" + studyYear + "}";
+        return getUsername() + "(" + faculty + ", studyYear=" + studyYear + ")";
     }
 	
 

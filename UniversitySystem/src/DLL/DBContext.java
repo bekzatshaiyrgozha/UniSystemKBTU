@@ -3,14 +3,15 @@ package DLL;
 import java.io.File;
 import java.util.*; 
 import Users.*;
-import Utils.News; 
+import Utils.News;
+import Utils.Attestation;
 import Utils.Course;
 import Utils.Register;
 import Utils.Request;
 
 public class DBContext {
     
-    private static String fullPath = "/home/xan001/UniSystemKBTU/UniversitySystem/src/Data/" ; 
+    private static String fullPath = "C:\\Users\\Asus\\Desktop\\UniSystemKBTU\\UniversitySystem\\src\\Data\\" ; 
     private static DBContext db = new DBContext();
 
     // Static lists holding the data
@@ -20,6 +21,7 @@ public class DBContext {
     public static Vector<News> newsList;
     public static Vector<Course> courseList;
     public static Vector<Register> registerList;
+    public static Vector<Attestation> attestationList ;
     public static Vector<Request> requests = new Vector<>();
     private static Vector<Student> studentsResearchers = new Vector<>();
 
@@ -31,15 +33,32 @@ public class DBContext {
         newsList = getNews();
         courseList = getCourse();
         registerList = getRegisters();
+        attestationList = getAttestations() ;
     }
 
     private DBContext() {}
 
-    // Methods to add items to the lists
+    private static Attestation getAttestation(String courseId , String studentUsername) {
+    	for (Attestation attestation : attestationList) {
+            if (attestation.getCourseId().equals(courseId) && attestation.getStudentUsername().equals(studentUsername)) {
+                return attestation;
+            }
+        }
+        return null;
+	}
+    public static Vector<Attestation> getAttestations(){
+    	String filePath = fullPath + "attestations.txt" ; 
+    	return getObjectsFromFile(filePath , Attestation.class); 
+    }
+    public static boolean saveAttestations() {
+        return ReaderWriter.serialize(attestationList, fullPath + "attestations.txt");
+    }
+
+	// Methods to add items to the lists
     public static void addRequest(Request request) {
         requests.add(request);
     }
-
+    
     public static Vector<Request> getRequests() {
         return requests;
     }
@@ -88,7 +107,6 @@ public class DBContext {
     private static <T> Vector<T> getObjectsFromFile(String filePath, Class<T> type) {
         File file = new File(filePath);
         if (!file.exists() || file.length() == 0) {
-            System.out.println("File is empty or does not exist, returning an empty list.");
             return new Vector<>();
         }
         Object o = ReaderWriter.deserialize(filePath);
@@ -156,7 +174,18 @@ public class DBContext {
     public static DBContext getDb() {
         return db;
     }
+    //method to create or get attestation : 
+    public static Attestation getOrCreateAttestation(String courseId , String studentUsername) {
+    	for (Attestation attestation : attestationList) {
+            if (attestation.getCourseId().equals(courseId) && attestation.getStudentUsername().equals(studentUsername)) {
+                return attestation;
+            }
+        }
 
+        Attestation newAttestation = new Attestation(courseId, studentUsername);
+        attestationList.add(newAttestation);
+        return newAttestation;
+    }
     // Method to count all employees (teachers, managers)
     public static int getCountOfEmployees() {
         return teacher.size() + manager.size();

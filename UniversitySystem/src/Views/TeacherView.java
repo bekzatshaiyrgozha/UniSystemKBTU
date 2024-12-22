@@ -1,5 +1,6 @@
 package Views;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Vector;
@@ -7,6 +8,7 @@ import java.util.Vector;
 import Controllers.UserController;
 import DLL.DBContext;
 import Enumerations.UrgencyLevel;
+import Utils.Attestation;
 import Utils.Complaint;
 import Utils.Course;
 import Utils.News;
@@ -21,11 +23,14 @@ public class TeacherView {
     public static void welcome(Teacher loggedInTeacher) {
         System.out.println("Welcome to WSP, " + loggedInTeacher.getUsername() + "!");
         System.out.println("Please select an option:");
-        System.out.println("0. Exit");
-        System.out.println("1. See all news");
-        System.out.println("2. View students in my courses");
-        System.out.println("3. Is salary gived");
-        System.out.println("4. submitComplaint");
+        System.out.println("- 0. Exit");
+        System.out.println("- 1. See all news");
+        System.out.println("- 2. View students in my courses");
+        System.out.println("- 3. Is salary gived");
+        System.out.println("- 4. Submit complaint");
+        System.out.println("- 5. Put Marks");
+        System.out.println("- 6. View Student Attestation"); 
+        System.out.print("Option : ");
         int option = in.nextInt();
         in.nextLine();  
 
@@ -34,7 +39,7 @@ public class TeacherView {
             MainView.welcome();
         }
         else if (option == 1) {
-            ManagerView.seeNews();
+            seeNews();
         } 
         else if (option == 2) {
             viewStudentsInMyCourses(loggedInTeacher);  
@@ -45,12 +50,168 @@ public class TeacherView {
         else if (option == 4) {
         	submitComplaint(loggedInTeacher); 
         }
+        else if(option == 5) {
+        	setStudentMarks(loggedInTeacher); 
+        }
+        else if(option == 6) {
+        	viewStudentAttestation(loggedInTeacher); 
+        }
         else {
             System.out.println("Invalid option, try again.");
             welcome(loggedInTeacher);  
         }
     }
-    
+    public static void viewStudentAttestation(Teacher teacher) {
+        System.out.println("Select a course:");
+        List<Course> teacherCourses = new ArrayList<>();
+        for (Course course : UserController.getAllCourses()) {
+            if (course.getCourseTeacher().equals(teacher.getUsername())) {
+                teacherCourses.add(course);
+            }
+        }
+
+        if (teacherCourses.isEmpty()) {
+            System.out.println("You have no courses.");
+            welcome(teacher);
+            return;
+        }
+
+        int i = 1;
+        for (Course course : teacherCourses) {
+            System.out.println(i + ". " + course.getCourseName());
+            i++;
+        }
+        System.out.print("Enter the course number: ");
+        int courseChoice = in.nextInt();
+        in.nextLine();
+
+        if (courseChoice < 1 || courseChoice > teacherCourses.size()) {
+            System.out.println("Invalid course choice, try again!");
+            welcome(teacher);
+            return;
+        }
+        Course selectedCourse = teacherCourses.get(courseChoice - 1);
+
+        System.out.println("Select a student:");
+        List<Student> courseStudents = new ArrayList<>();
+        for (Register register : DBContext.registerList) {
+            if (register.getCourse().getCourseId().equals(selectedCourse.getCourseId())) {
+                courseStudents.add(register.getStudent());
+            }
+        }
+
+        if (courseStudents.isEmpty()) {
+            System.out.println("No students for this course.");
+            welcome(teacher);
+            return;
+        }
+
+        i = 1;
+        for (Student s : courseStudents) {
+            System.out.println(i + ". " + s.getUsername());
+            i++;
+        }
+        System.out.print("Enter the student number: ");
+        int studentChoice = in.nextInt();
+        in.nextLine();
+
+        if (studentChoice < 1 || studentChoice > courseStudents.size()) {
+            System.out.println("Invalid student choice.");
+            welcome(teacher);
+            return;
+        }
+        Student selectedStudent = courseStudents.get(studentChoice - 1);
+
+        Attestation attestation = DBContext.getOrCreateAttestation(selectedCourse.getCourseId(), selectedStudent.getUsername());
+        System.out.println("Student Attestation:");
+        System.out.println(attestation);
+
+        welcome(teacher);
+    }
+
+	public static void setStudentMarks(Teacher teacher) {
+    	System.out.println("Select a course : "); 
+    	List<Course> teacherCourses = new ArrayList<>() ;
+    	for(Course course : UserController.getAllCourses()) {
+    		if(course.getCourseTeacher().equals(teacher.getUsername())) {
+    			teacherCourses.add(course); 
+    		}
+    	}
+    	if(teacherCourses.isEmpty()) {
+    		System.out.println("You have no courses") ;
+    		welcome(teacher); 
+    		return ; 
+    	} 
+    	int i = 1 ; 
+    	for(Course course : teacherCourses) {
+    		System.out.println(i + "." + course.getCourseName()); 
+    		i ++ ; 
+    	}
+    	System.out.println("Enter the course number : ") ;
+    	int courseChoice = in.nextInt() ;
+    	in.nextLine() ; 
+    	
+    	if(courseChoice < 1 || courseChoice > teacherCourses.size()) {
+    		System.out.println("Invalid course choice , try again!"); 
+    		welcome(teacher) ;
+    		return ; 
+    	}
+    	Course selectedCourse = teacherCourses.get(courseChoice - 1) ;
+    	System.out.println("Select a student : ");
+    	List<Student> courseStudents = new ArrayList<>(); 
+    	for(Register register : DBContext.registerList) {
+    		if(register.getCourse().getCourseId().equals(selectedCourse.getCourseId())) {
+    			courseStudents.add(register.getStudent());     		}
+    	}
+    	if(courseStudents.isEmpty()) {
+    		System.out.println("No students for this course.") ;
+    		welcome(teacher) ;
+    		return; 
+    	}
+    	i = 1 ;
+    	for(Student s : courseStudents) {
+    		System.out.println(i + ". " + s.getUsername()); 
+    		i ++ ; 
+    	}
+    	System.out.println("Enter the student number : ") ;
+    	int studentChoice = in.nextInt(); 
+    	in.nextLine(); 
+    	if (studentChoice < 1 || studentChoice > courseStudents.size()) {
+            System.out.println("Invalid student choice.");
+            welcome(teacher);
+            return;
+        }
+    	Student selectedStudent = courseStudents.get(studentChoice - 1);
+
+        // Установка оценок
+        Attestation attestation = DBContext.getOrCreateAttestation(selectedCourse.getCourseId(), selectedStudent.getUsername());
+
+        System.out.print("Enter score for the First Attestation: ");
+        double firstAttScore = in.nextDouble();
+        attestation.putFirstAttestation(firstAttScore);
+
+        System.out.print("Enter score for the Second Attestation: ");
+        double secondAttScore = in.nextDouble();
+        attestation.putSecondAttestation(secondAttScore);
+
+        System.out.print("Enter score for the Final Exam: ");
+        double finalExamScore = in.nextDouble();
+        attestation.putFinalExamScore(finalExamScore);
+
+        System.out.println("Scores updated successfully:");
+        System.out.println(attestation);
+        DBContext.saveAttestations(); 
+        welcome(teacher);
+    	
+    }
+    public static void seeNews() {
+        System.out.println("Loading all news...");
+
+        for (News news : UserController.getAllNews()) {
+            System.out.println(news);
+            System.out.println("------------------------");
+        }
+    }
     public static void submitComplaint(Teacher teacher) {
 
         // Список студентов, на которых можно подать жалобу

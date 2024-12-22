@@ -1,10 +1,14 @@
 package Views;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 import java.util.Vector;
 
 import Users.Student;
+import Utils.Attestation;
 import Utils.Course;
+import Utils.News;
 import Utils.Register;
 import Utils.Request;
 import Controllers.UserController;
@@ -18,7 +22,8 @@ public class StudentView {
         System.out.println("Please select an option:");
         System.out.println("0. Exit");
         System.out.println("1. See all news");
-        System.out.println("2.Send request");
+        System.out.println("2. Send request");
+        System.out.println("3. View My Attestations"); 
         System.out.println("7. View My Profile");
         System.out.println("8. Register for a Course");
 
@@ -30,10 +35,13 @@ public class StudentView {
             MainView.welcome();
         } 
         else if (option == 1) {
-            ManagerView.seeNews();
+            seeNews();
         } 
         else if (option == 2) {
         	sendRequest(loggedInStudent); 
+        }
+        else if(option == 3) {
+        	viewMyAttestations(loggedInStudent) ;
         }
         else if (option == 7) {
             myProfile(loggedInStudent);  
@@ -44,6 +52,54 @@ public class StudentView {
         else {
             System.out.println("Invalid option. Please try again.");
             welcome(loggedInStudent);  
+        }
+    }
+    private static void viewMyAttestations(Student loggedInStudent) {
+    	System.out.println("Select a course to view your attestation:");
+        
+        List<Course> studentCourses = new ArrayList<>();
+        for (Register register : DBContext.registerList) {
+            if (register.getStudent().getUsername().equals(loggedInStudent.getUsername())) {
+                studentCourses.add(register.getCourse());
+            }
+        }
+
+        if (studentCourses.isEmpty()) {
+            System.out.println("You are not registered for any courses.");
+            welcome(loggedInStudent);
+            return;
+        }
+
+        int i = 1;
+        for (Course course : studentCourses) {
+            System.out.println(i + ". " + course.getCourseName());
+            i++;
+        }
+        System.out.print("Enter the course number: ");
+        int courseChoice = in.nextInt();
+        in.nextLine();
+
+        if (courseChoice < 1 || courseChoice > studentCourses.size()) {
+            System.out.println("Invalid course choice, try again!");
+            welcome(loggedInStudent);
+            return;
+        }
+
+        Course selectedCourse = studentCourses.get(courseChoice - 1);
+
+        
+        Attestation attestation = DBContext.getOrCreateAttestation(selectedCourse.getCourseId(), loggedInStudent.getUsername());
+        System.out.println("Your Attestation for Course: " + selectedCourse.getCourseName());
+        System.out.println(attestation);
+
+        welcome(loggedInStudent);
+	}
+	public static void seeNews() {
+        System.out.println("Loading all news...");
+
+        for (News news : UserController.getAllNews()) {
+            System.out.println(news);
+            System.out.println("------------------------");
         }
     }
     public static void sendRequest(Student student) {

@@ -7,6 +7,7 @@ import Controllers.UserController;
 import Enumerations.Faculty;
 import Enumerations.SemesterType;
 import Enumerations.UserType;
+import Utils.News;
 
 public class AdminView {
 	
@@ -40,9 +41,17 @@ public class AdminView {
 		} else if(option == 5) {
 			deleteUser();
 		} else if(option == 6) {
-			ManagerView.seeNews();
+			seeNews();
 		}
 	}
+    public static void seeNews() {
+        System.out.println("Loading all news...");
+
+        for (News news : UserController.getAllNews()) {
+            System.out.println(news);
+            System.out.println("------------------------");
+        }
+    }
 	public static void showManagers() {
 		System.out.println("Loading the managers..."); 
 		
@@ -95,7 +104,7 @@ public class AdminView {
 			String password = in.nextLine();
 			
 			// controller
-			boolean res = AdminController.addUser(username, password  ,UserType.TEACHER,null, option);
+			boolean res = AdminController.addUser(username, password  , UserType.TEACHER, null, option);
 			
 			if (res) {
 				System.out.println(username + " is created!");
