@@ -1,0 +1,146 @@
+package Views;
+
+import java.util.Scanner;
+import Controllers.UserController;
+import DLL.DBContext;
+import Utils.Complaint;
+import Users.Student;
+import Users.Teacher;
+import Users.Manager; // Добавим Manager, чтобы отправить жалобу на рассмотрение
+import Utils.News;
+
+public class TeacherView {
+    static Scanner in = new Scanner(System.in);
+
+    public static void welcome(Teacher loggedInTeacher) {
+        System.out.println("Welcome to WSP, " + loggedInTeacher.getUsername() + "!");
+        System.out.println("Please select an option:");
+        System.out.println("0. Exit");
+        System.out.println("1. See all news");
+        System.out.println("2. View students in my courses");
+        System.out.println("3. Submit a complaint");
+        int option = in.nextInt();
+        in.nextLine();  
+
+        if (option == 0) {
+            System.out.println("Bye bye!");
+            MainView.welcome();
+        } else if (option == 1) {
+            ManagerView.seeNews();
+        } else if (option == 2) {
+            viewStudentsInMyCourses(loggedInTeacher);  
+        } else if (option == 3) {
+            submitComplaint(loggedInTeacher);  // Вызов нового метода для жалобы
+        } else {
+            System.out.println("Invalid option, try again.");
+            welcome(loggedInTeacher);  
+        }
+    }
+
+    // Метод для отправки жалобы преподавателем
+    public static void submitComplaint(Teacher teacher) {
+        System.out.println("Enter your complaint description:");
+        String description = in.nextLine();
+
+        // Список студентов, на которых можно подать жалобу
+        System.out.println("Select the student to complain about:");
+        int i = 1;
+        for (Student student : DBContext.getAllStudents()) {
+            System.out.println(i + ". " + student.getUsername());
+            i++;
+        }
+        System.out.print("Enter the student number: ");
+        int studentChoice = in.nextInt();
+        in.nextLine();  // Очищаем буфер
+
+        // Получаем выбранного студента
+        Student selectedStudent = null;
+        i = 1;
+        for (Student student : DBContext.getAllStudents()) {
+            if (i == studentChoice) {
+                selectedStudent = student;
+                break;
+            }
+            i++;
+        }
+
+        if (selectedStudent == null) {
+            System.out.println("Invalid student choice.");
+            return;
+        }
+
+        System.out.println("Select the priority of your complaint:");
+        System.out.println("1. High");
+        System.out.println("2. Middle");
+        System.out.println("3. Low");
+        int priority = in.nextInt();
+        in.nextLine();  // Очищаем буфер
+
+        String priorityLevel = "";
+        switch (priority) {
+            case 1:
+                priorityLevel = "High";
+                break;
+            case 2:
+                priorityLevel = "Middle";
+                break;
+            case 3:
+                priorityLevel = "Low";
+                break;
+            default:
+                System.out.println("Invalid priority level, setting to Low.");
+                priorityLevel = "Low";
+        }
+
+        // Создаем объект жалобы
+        Complaint complaint = new Complaint(teacher, description, priorityLevel, selectedStudent);
+
+        // Если приоритет высокий, добавляем в новости
+        if ("High".equals(priorityLevel)) {
+            News news = new News("High priority complaint from " + teacher.getUsername(), description);
+            DBContext.addNews(news);
+            System.out.println("Your high-priority complaint has been added to the news.");
+        } else {
+            // Если приоритет не высокий, жалоба отправляется менеджеру на рассмотрение
+            Manager manager = DBContext.getManager(); // Получаем текущего менеджера
+            manager.receiveComplaint(complaint);
+            System.out.println("Your complaint has been submitted to the manager.");
+        }
+
+        welcome(teacher);
+    }
+
+    public static void viewStudentsInMyCourses(Teacher teacher) {
+        boolean foundCourse = false;
+
+        for (Course course : UserController.getAllCourses()) {
+            if (course.getCourseTeacher().equals(teacher.getUsername())) {
+                foundCourse = true;
+                System.out.println("course: " + course.getCourseName());
+
+                boolean courseHasStudents = false;
+
+                for (Register register : DBContext.registerList) {
+                    if (register.getCourse().getCourseId().equals(course.getCourseId())) {
+                        Student student = register.getStudent();
+                        System.out.println("student: " + student.getUsername());
+                        
+                        courseHasStudents = true;
+                    }
+                }
+
+                if (!courseHasStudents) {
+                    System.out.println("No students have registered.");
+                }
+
+                System.out.println("------------------------");
+            }
+        }
+
+        if (!foundCourse) {
+            System.out.println("You don't have any courses assigned.");
+        }
+
+        welcome(teacher);  
+    }
+}

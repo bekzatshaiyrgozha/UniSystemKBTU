@@ -1,0 +1,39 @@
+package Utils;
+import Users.Teacher;
+import Users.Student;
+import Enumerations.UrgencyLevel;
+public class Complaint {
+    private Teacher teacher;  // Преподаватель, который подает жалобу
+    private String description;
+    private String priorityLevel;
+    private Student targetStudent;  // Студент, на которого подана жалоба
+
+    public Complaint(Teacher teacher, String description, String priorityLevel, Student targetStudent) {
+        this.teacher = teacher;
+        this.description = description;
+        this.priorityLevel = priorityLevel;
+        this.targetStudent = targetStudent;
+    }
+
+    // Геттеры и сеттеры
+    public Teacher getTeacher() {
+        return teacher;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getPriorityLevel() {
+        return priorityLevel;
+    }
+
+    public Student getTargetStudent() {
+        return targetStudent;
+    }
+
+    @Override
+    public String toString() {
+        return "Complaint from " + teacher.getUsername() + " about " + targetStudent.getUsername() + " (" + priorityLevel + "): " + description;
+    }
+}

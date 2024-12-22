@@ -1,0 +1,174 @@
+package Views;
+
+import java.util.List;
+import java.util.Scanner;
+import java.util.Vector;
+
+import Controllers.UserController;
+import DLL.DBContext;
+import Enumerations.UrgencyLevel;
+import Utils.Complaint;
+import Utils.Course;
+import Utils.News;
+import Utils.Register;
+import Users.Teacher;
+import Users.Student;
+import Users.Employee;
+import Users.Manager; 
+public class TeacherView {
+    static Scanner in = new Scanner(System.in); 
+
+    public static void welcome(Teacher loggedInTeacher) {
+        System.out.println("Welcome to WSP, " + loggedInTeacher.getUsername() + "!");
+        System.out.println("Please select an option:");
+        System.out.println("0. Exit");
+        System.out.println("1. See all news");
+        System.out.println("2. View students in my courses");
+        System.out.println("3. Is salary gived");
+        System.out.println("4. submitComplaint");
+        int option = in.nextInt();
+        in.nextLine();  
+
+        if (option == 0) {
+            System.out.println("Bye bye!"); 
+            MainView.welcome();
+        }
+        else if (option == 1) {
+            ManagerView.seeNews();
+        } 
+        else if (option == 2) {
+            viewStudentsInMyCourses(loggedInTeacher);  
+        } 
+        else if (option == 3) {
+        	isGiveSalary(loggedInTeacher); 
+        } 
+        else if (option == 4) {
+        	submitComplaint(loggedInTeacher); 
+        }
+        else {
+            System.out.println("Invalid option, try again.");
+            welcome(loggedInTeacher);  
+        }
+    }
+    
+    public static void submitComplaint(Teacher teacher) {
+        System.out.println("Enter your complaint description:");
+        String description = "You are called to the dean's office.";
+
+        // Список студентов, на которых можно подать жалобу
+        System.out.println("Select the student to complain about:");
+        List<Student> students = DBContext.getStudents();
+        int i = 1;
+        for (Student student : students) {
+            System.out.println(i + ". " + student.getUsername());
+            i++;
+        }
+        System.out.print("Enter the student number: ");
+        int studentChoice = in.nextInt();
+        in.nextLine();  // Очищаем буфер
+
+        // Проверка, что выбранный студент существует
+        if (studentChoice < 1 || studentChoice > students.size()) {
+            System.out.println("Invalid student choice.");
+            return;
+        }
+
+        // Получаем выбранного студента
+        Student selectedStudent = students.get(studentChoice - 1);
+
+        // Выбор уровня приоритета жалобы
+        System.out.println("Select the priority of your complaint:");
+        System.out.println("1. High");
+        System.out.println("2. Middle");
+        System.out.println("3. Low");
+        int priority = in.nextInt();
+        in.nextLine();  // Очищаем буфер
+
+        UrgencyLevel priorityLevel = UrgencyLevel.LOW;  // По умолчанию LOW
+        switch (priority) {
+            case 1:
+                priorityLevel = UrgencyLevel.HIGH;
+                break;
+            case 2:
+                priorityLevel = UrgencyLevel.MIDDLE;
+                break;
+            case 3:
+                priorityLevel = UrgencyLevel.LOW;
+                break;
+            default:
+                System.out.println("Invalid priority level, setting to Low.");
+                priorityLevel = UrgencyLevel.LOW;
+        }
+
+        // Создаем объект жалобы
+        Complaint complaint = new Complaint(teacher, description, priorityLevel, selectedStudent);
+
+        // Если приоритет высокий, добавляем в новости
+        if (priorityLevel == UrgencyLevel.HIGH) {
+            // Создаем описание для новости
+            String newsDescription = "Complaint from Teacher " + teacher.getUsername() + ": " +
+                "Student " + selectedStudent.getUsername() + " is being called to the dean's office. " +
+                "Description: " + description;
+            
+            // Создаем новость с этим описанием
+            News news = new News("High priority complaint from " + teacher.getUsername(), newsDescription);
+            DBContext.addNews(news);
+            
+            System.out.println("Your high-priority complaint has been added to the news: " + newsDescription);
+            welcome(teacher);  // Возвращаемся в главное меню
+        } else {
+            // Если приоритет не высокий, жалоба отправляется менеджеру на рассмотрение
+            Vector<Manager> managers = DBContext.getManagers(); // Получаем список менеджеров
+            if (managers != null && !managers.isEmpty()) {
+                Manager manager = managers.get(0);  // Предположим, что у нас только один менеджер
+                // Можно добавить дополнительные действия для отправки жалобы менеджеру
+            }
+
+            welcome(teacher);  // Возвращаемся в главное меню
+        }
+    }
+
+
+    public static void viewStudentsInMyCourses(Teacher teacher) {
+        boolean foundCourse = false;
+
+        for (Course course : UserController.getAllCourses()) {
+            if (course.getCourseTeacher().equals(teacher.getUsername())) {
+                foundCourse = true;
+                System.out.println("course: " + course.getCourseName());
+
+                boolean courseHasStudents = false;
+
+                for (Register register : DBContext.registerList) {
+                    if (register.getCourse().getCourseId().equals(course.getCourseId())) {
+                        Student student = register.getStudent();
+                        System.out.println("student: " + student.getUsername());
+                        
+                        courseHasStudents = true;
+                    }
+                }
+
+                if (!courseHasStudents) {
+                    System.out.println("No has registered ");
+                }
+
+                System.out.println("------------------------");
+            }
+        }
+
+        if (!foundCourse) {
+            System.out.println("you don't have a course");
+        }
+
+        welcome(teacher);  
+    }
+    public static void isGiveSalary(Teacher teacher) {
+    	if(Employee.isSalaryPaid()) {
+    		System.out.println("Gived salary.");
+    		
+    	}else {
+    		System.out.println("Not gived salary.");
+    	} 
+    	welcome(teacher); 
+    }
+}

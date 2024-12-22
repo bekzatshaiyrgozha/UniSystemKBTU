@@ -6,7 +6,7 @@ import Controllers.UserController;
 import Users.User;
 
 public class News implements Serializable{
-	private static final long serialVersionUID = 1L; // Рекомендуется добавлять этот идентификатор для сериализации
+	private static final long serialVersionUID = 1L; 
     private String title;
     private String content;
 
