@@ -7,6 +7,7 @@ import Controllers.FinanceManagerController;
 import Controllers.ManagerController;
 import Controllers.UserController;
 import Enumerations.Faculty;
+import Exception.UserNotFoundException;
 import Users.Employee;
 import Utils.Course;
 import Utils.News;
@@ -15,7 +16,7 @@ public class FinanceManagerView {
 private static Scanner in = new Scanner(System.in);
     
 
-    public static void welcome() {
+    public static void welcome() throws UserNotFoundException {
         System.out.println("Welcome to WSP!\n<Finance MANAGER SIDE>\nPlease select the option:");
         System.out.println("- 0. Exit");
         System.out.println("- 1. See all news");
@@ -47,7 +48,7 @@ private static Scanner in = new Scanner(System.in);
         }
     }
 
-    public static void isGiveSalary() {
+    public static void isGiveSalary() throws UserNotFoundException {
     	if(Employee.isSalaryPaid()) {
     		System.out.println("Gived salary.");
     		
@@ -60,7 +61,7 @@ private static Scanner in = new Scanner(System.in);
     }
     
     
-    public static void seeNews() {
+    public static void seeNews() throws UserNotFoundException {
         System.out.println("Loading all news...");
         
         for (News news : UserController.getAllNews()) {
@@ -70,12 +71,12 @@ private static Scanner in = new Scanner(System.in);
    
         welcome();
     }
-	public static void giveSalary() {
+	public static void giveSalary() throws UserNotFoundException {
     	System.out.println("Loading prosedure...");
     	FinanceManagerController.giveSalary();
     	welcome();
     }
-    public static void seeBudjet() {
+    public static void seeBudjet() throws UserNotFoundException {
     	System.out.println("Uni budjet:" + FinanceManagerController.seeBudjet());
     	
     	welcome();

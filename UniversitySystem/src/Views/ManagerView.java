@@ -8,6 +8,7 @@ import Controllers.ManagerController;
 import Controllers.UserController;
 import DLL.DBContext;
 import Enumerations.Faculty;
+import Exception.UserNotFoundException;
 import Utils.News;
 import Utils.Request;
 import Utils.Course;
@@ -18,7 +19,7 @@ import Users.Teacher;
 public class ManagerView {
     private static Scanner in = new Scanner(System.in);
 
-    public static void welcome() {
+    public static void welcome() throws UserNotFoundException {
         while (true) {
             System.out.println("Welcome to WSP!\n<MANAGER SIDE>\nPlease select the option:");
             System.out.println("- 0. Exit");

@@ -1,10 +1,10 @@
 package Main;
 
-import Users.Teacher;
+import Exception.UserNotFoundException;
 import Views.MainView;
 
 public class Launcher {
-	public static void main(String[] args) {
+	public static void main(String[] args) throws UserNotFoundException {
 		MainView.welcome();
 	}
 }

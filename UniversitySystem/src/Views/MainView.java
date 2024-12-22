@@ -4,6 +4,7 @@ import java.util.Scanner;
 import Users.*;
 import Controllers.UserController;
 import Enumerations.UserType;
+import Exception.UserNotFoundException;
 
 public class MainView {
     private static Scanner in = new Scanner(System.in);
@@ -22,30 +23,35 @@ public class MainView {
         System.out.print("\nRole: ");
         int option = in.nextInt();
 
-        switch (option) {
-            case 0:
-                authorizeAdmin();
-                break;
-            case 1:
-                authorize("teacher.txt", UserType.TEACHER);
-                break;
-            case 2:
-                authorize("managers.txt", UserType.MANAGER);
-                break;
-            case 3:
-                authorize("students.txt", UserType.STUDENT);
-                break;
-            case 4:
-            	authorizeFinanceManager();
-            	break;
-            	
-            default:
-                System.out.println("Invalid option!");
-                welcome();
+        try {
+            switch (option) {
+                case 0:
+                    authorizeAdmin();
+                    break;
+                case 1:
+                    authorize("teacher.txt", UserType.TEACHER);
+                    break;
+                case 2:
+                    authorize("managers.txt", UserType.MANAGER);
+                    break;
+                case 3:
+                    authorize("students.txt", UserType.STUDENT);
+                    break;
+                case 4:
+                    authorizeFinanceManager();
+                    break;
+                default:
+                    System.out.println("Invalid option!");
+                    welcome();
+            }
+        } catch (UserNotFoundException e) {
+            System.out.println(e.getMessage());  // Print the error message
+            welcome();  // Show the welcome screen again for retry
         }
     }
+
     
-    public static void authorizeFinanceManager() {
+    public static void authorizeFinanceManager() throws UserNotFoundException {
     	System.out.println("Please, enter admin credentials:");
         in.nextLine();  
         System.out.print("Username: ");
@@ -62,7 +68,7 @@ public class MainView {
         }
     }
 
-    public static void authorizeAdmin() {
+    public static void authorizeAdmin() throws UserNotFoundException {
         System.out.println("Please, enter admin credentials:");
         in.nextLine();  
         System.out.print("Username: ");
@@ -79,7 +85,7 @@ public class MainView {
         }
     }
 
-    public static void authorize(String fileName, UserType userType) {
+    public static void authorize(String fileName, UserType userType) throws UserNotFoundException {
         System.out.println("Please, enter your credentials:");
         in.nextLine();  // Consume the newline character left by nextInt()
 
@@ -89,8 +95,7 @@ public class MainView {
         System.out.print("Password: ");
         String password = in.nextLine();
 
-        boolean res = UserController.authorize(fileName, username, password);
-
+        boolean res = UserController.authorize(fileName, username, password); 
         if (res) {
             System.out.println("Login successful!");
 
@@ -98,14 +103,14 @@ public class MainView {
                 loggedInStudent = UserController.getStudentByUsername(username);
                 StudentView.welcome(loggedInStudent);  
             } else if (userType == UserType.TEACHER) {
-                Teacher loggedInTeacher = UserController.getTeacherByUsername(username); // Get the logged-in teacher
-                TeacherView.welcome(loggedInTeacher);  // Pass the Teacher object to the TeacherView
+                Teacher loggedInTeacher = UserController.getTeacherByUsername(username); 
+                TeacherView.welcome(loggedInTeacher);
             } else if (userType == UserType.MANAGER) {
                 ManagerView.welcome(); 
             }
         } else {
-            System.out.println("Invalid username or password.");
-            welcome();  
+            throw new UserNotFoundException("Invalid username or password.");
         }
+
     }
 }

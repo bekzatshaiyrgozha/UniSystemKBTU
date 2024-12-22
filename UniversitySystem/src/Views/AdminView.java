@@ -7,6 +7,7 @@ import Controllers.UserController;
 import Enumerations.Faculty;
 import Enumerations.SemesterType;
 import Enumerations.UserType;
+import Exception.UserNotFoundException;
 import Utils.News;
 
 public class AdminView {
@@ -15,7 +16,7 @@ public class AdminView {
 //	private static BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 	
 	//admin welcome page
-	public static void welcome() {
+	public static void welcome() throws UserNotFoundException {
 		System.out.println("Welcome to WSP!\n<ADMIN SIDE>\nPlease select the option:");
 		System.out.println("- 0.Exit"); 
 		System.out.println("- 1. Create a new user;");
@@ -52,7 +53,7 @@ public class AdminView {
             System.out.println("------------------------");
         }
     }
-	public static void showManagers() {
+	public static void showManagers() throws UserNotFoundException {
 		System.out.println("Loading the managers..."); 
 		
 		Object o = UserController.getUsers(UserType.MANAGER);
@@ -61,7 +62,7 @@ public class AdminView {
 		
 		welcome();
 	}
-	public static void showTeachers() {
+	public static void showTeachers() throws UserNotFoundException {
 		System.out.println("Loading the teachers...");
 		
 		Object o = UserController.getUsers(UserType.TEACHER);
@@ -70,7 +71,7 @@ public class AdminView {
 		
 		welcome();
 	}
-	public static void showStudents() {
+	public static void showStudents() throws UserNotFoundException {
 		System.out.println("Loading the students..."); 
 		
 		Object o = UserController.getUsers(UserType.STUDENT); 
@@ -79,7 +80,7 @@ public class AdminView {
 		
 		welcome() ; 
 	}
-	public static void createUser() {
+	public static void createUser() throws UserNotFoundException {
 		
 		System.out.println("What role do you want to create?");
 		System.out.println("- 0. Back to Admin side"); 
@@ -200,7 +201,7 @@ public class AdminView {
 		}
 	
 	}
-	public static void deleteUser() {
+	public static void deleteUser() throws UserNotFoundException {
 		 System.out.println("What type of user do you want to delete?");
 	     System.out.println("- 0.Back to ADMIN SIDE"); 
 		 System.out.println("- 1. Teacher");

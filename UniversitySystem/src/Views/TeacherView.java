@@ -8,6 +8,7 @@ import java.util.Vector;
 import Controllers.UserController;
 import DLL.DBContext;
 import Enumerations.UrgencyLevel;
+import Exception.UserNotFoundException;
 import Utils.Attestation;
 import Utils.Complaint;
 import Utils.Course;
@@ -20,7 +21,7 @@ import Users.Manager;
 public class TeacherView {
     static Scanner in = new Scanner(System.in); 
 
-    public static void welcome(Teacher loggedInTeacher) {
+    public static void welcome(Teacher loggedInTeacher) throws UserNotFoundException {
         System.out.println("Welcome to WSP, " + loggedInTeacher.getUsername() + "!");
         System.out.println("Please select an option:");
         System.out.println("- 0. Exit");
@@ -61,7 +62,7 @@ public class TeacherView {
             welcome(loggedInTeacher);  
         }
     }
-    public static void viewStudentAttestation(Teacher teacher) {
+    public static void viewStudentAttestation(Teacher teacher) throws UserNotFoundException {
         System.out.println("Select a course:");
         List<Course> teacherCourses = new ArrayList<>();
         for (Course course : UserController.getAllCourses()) {
@@ -129,7 +130,7 @@ public class TeacherView {
         welcome(teacher);
     }
 
-	public static void setStudentMarks(Teacher teacher) {
+	public static void setStudentMarks(Teacher teacher) throws UserNotFoundException {
     	System.out.println("Select a course : "); 
     	List<Course> teacherCourses = new ArrayList<>() ;
     	for(Course course : UserController.getAllCourses()) {
@@ -212,7 +213,7 @@ public class TeacherView {
             System.out.println("------------------------");
         }
     }
-    public static void submitComplaint(Teacher teacher) {
+    public static void submitComplaint(Teacher teacher) throws UserNotFoundException {
 
         // Список студентов, на которых можно подать жалобу
         System.out.println("Select the student to complain about:");
@@ -286,7 +287,7 @@ public class TeacherView {
     }
 
 
-    public static void viewStudentsInMyCourses(Teacher teacher) {
+    public static void viewStudentsInMyCourses(Teacher teacher) throws UserNotFoundException {
         boolean foundCourse = false;
 
         for (Course course : UserController.getAllCourses()) {
@@ -319,7 +320,7 @@ public class TeacherView {
 
         welcome(teacher);  
     }
-    public static void isGiveSalary(Teacher teacher) {
+    public static void isGiveSalary(Teacher teacher) throws UserNotFoundException {
     	if(Employee.isSalaryPaid()) {
     		System.out.println("Gived salary.");
     		

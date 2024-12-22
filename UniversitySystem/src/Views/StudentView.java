@@ -13,11 +13,12 @@ import Utils.Register;
 import Utils.Request;
 import Controllers.UserController;
 import DLL.DBContext;
+import Exception.UserNotFoundException;
 
 public class StudentView {
     static Scanner in = new Scanner(System.in); 
 
-    public static void welcome(Student loggedInStudent) {
+    public static void welcome(Student loggedInStudent) throws UserNotFoundException {
         System.out.println("\nWelcome to WSP, " + loggedInStudent.getUsername() + "!");
         System.out.println("Please select an option:");
         System.out.println("0. Exit");
@@ -54,7 +55,7 @@ public class StudentView {
             welcome(loggedInStudent);  
         }
     }
-    private static void viewMyAttestations(Student loggedInStudent) {
+    private static void viewMyAttestations(Student loggedInStudent) throws UserNotFoundException {
     	System.out.println("Select a course to view your attestation:");
         
         List<Course> studentCourses = new ArrayList<>();
@@ -102,7 +103,7 @@ public class StudentView {
             System.out.println("------------------------");
         }
     }
-    public static void sendRequest(Student student) {
+    public static void sendRequest(Student student) throws UserNotFoundException {
     	System.out.println("Enter your request description:");
         String description = in.nextLine();
 
@@ -112,7 +113,7 @@ public class StudentView {
         System.out.println("Your request has been sent!");
         welcome(student);
     }
-    public static void myProfile(Student student) {
+    public static void myProfile(Student student) throws UserNotFoundException {
         System.out.println("\n--- Student Profile ---");
         System.out.println("Username: " + student.getUsername());
         System.out.println("Faculty: " + student.getFaculty());
@@ -121,7 +122,7 @@ public class StudentView {
         welcome(student);
 
     }
-    public static void registerForCourse(Student student) {
+    public static void registerForCourse(Student student) throws UserNotFoundException {
         // Получаем все курсы
         Vector<Course> availableCourses = UserController.getAllCourses();
 
