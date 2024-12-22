@@ -48,6 +48,9 @@ public class ManagerController {
 		DBContext.addCourse(course);
 		return true; 
 	}
+	   public static Vector<Teacher> getAllTeachers() {
+	        return DBContext.getTeachers();
+	    }
 	
 	
 	

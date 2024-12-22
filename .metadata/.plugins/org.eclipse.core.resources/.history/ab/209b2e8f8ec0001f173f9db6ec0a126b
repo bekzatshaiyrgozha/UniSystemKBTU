@@ -1,0 +1,58 @@
+package Controllers;
+
+import java.util.Vector;
+import DLL.DBContext;
+import Enumerations.Faculty;
+import Users.Teacher;
+import Utils.Course;
+import Utils.News;
+import Users.Student;
+import Utils.Request;
+
+public class ManagerController {
+    
+    // Создание новости
+    public static void createNews(String title , String content) {
+        News news = new News(title , content); 
+        DBContext.addNews(news);
+    }
+
+    public static boolean createNews(News news) {
+        DBContext.addNews(news);
+        return true; 
+    }
+
+    // Получение всех запросов
+    public static Vector<Request> getAllRequests() {
+        return DBContext.getRequests();
+    }
+
+    // Обработка запроса
+    public static void processRequest(Request request, boolean approve) {
+        if (approve) {
+            request.approve();
+            DBContext.addStudentToResearchers(request.getStudent());  // Добавление студента в список исследователей
+        } else {
+            request.reject();
+        }
+    }
+
+    // Создание курса с использованием объекта преподавателя
+    public static void createCourse(String courseId, String courseName, Teacher courseTeacher, 
+            int studyYear, Faculty faculty) {
+        Course course = new Course(courseId, courseName, courseTeacher, studyYear, faculty);
+        DBContext.addCourse(course);
+        System.out.println("Course " + courseName + " created successfully!");
+    }
+
+    // Создание курса, используя объект Course
+    public static boolean createcourse(Course course) {
+        DBContext.addCourse(course);
+        return true; 
+    }
+    
+    // Получение всех преподавателей (например, для выбора из списка)
+    public static Vector<Teacher> getAllTeachers() {
+        return DBContext.getTeachers();
+    }
+}

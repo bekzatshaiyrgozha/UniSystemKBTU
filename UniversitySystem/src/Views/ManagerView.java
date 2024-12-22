@@ -12,6 +12,7 @@ import Utils.Request;
 import Utils.Course;
 import Users.Employee;
 import Users.Student;
+import Users.Teacher;
 
 public class ManagerView
  {
@@ -157,9 +158,32 @@ private static Scanner in = new Scanner(System.in);
         System.out.println("Enter the course name:");
         String courseName = in.nextLine();
         
-        System.out.println("Enter the course teacher:");
-        String courseTeacher = in.nextLine();
+        // Получаем список преподавателей из системы (например, через контроллер)
+        Vector<String> teachers = getExistingTeachers();  // Этот метод будет получать список преподавателей из базы данных
         
+        // Если нет преподавателей, выводим сообщение и выходим
+        if (teachers.isEmpty()) {
+            System.out.println("No teachers available.");
+            return;
+        }
+        
+        // Выводим список преподавателей
+        System.out.println("Select the course teacher:");
+        for (int i = 0; i < teachers.size(); i++) {
+            System.out.println((i + 1) + ". " + teachers.get(i));  // Выводим преподавателей с номерами
+        }
+        System.out.print("Option: ");
+        int teacherOption = in.nextInt();
+        in.nextLine();  // Очищаем буфер
+
+        if (teacherOption < 1 || teacherOption > teachers.size()) {
+            System.out.println("Invalid teacher option.");
+            return;
+        }
+        
+        // Получаем выбранного преподавателя
+        String selectedTeacher = teachers.get(teacherOption - 1);
+
         System.out.println("Select study year:");
         System.out.println("1. First Year");
         System.out.println("2. Second Year");
@@ -187,7 +211,6 @@ private static Scanner in = new Scanner(System.in);
                 return;  
         }
 
-
         System.out.println("Select the faculty:");
         System.out.println("1. FIT");
         System.out.println("2. BS");
@@ -195,25 +218,25 @@ private static Scanner in = new Scanner(System.in);
         System.out.print("Option: ");
         int facultyOption = in.nextInt();
         Faculty faculty = null;
-        
-        switch (facultyOption) {
-        case 1:
-            faculty = Faculty.FIT;
-            break;
-        case 2:
-            faculty = Faculty.BS;
-            break;
-        case 3:
-            faculty = Faculty.SEPI;
-            break;
-        default:
-            System.out.println("Invalid faculty option. Defaulting to FIT.");
-    }
 
+        switch (facultyOption) {
+            case 1:
+                faculty = Faculty.FIT;
+                break;
+            case 2:
+                faculty = Faculty.BS;
+                break;
+            case 3:
+                faculty = Faculty.SEPI;
+                break;
+            default:
+                System.out.println("Invalid faculty option. Defaulting to FIT.");
+                faculty = Faculty.FIT;
+        }
+
+        // Создаем объект курса
+        Course course = new Course(courseId, courseName, selectedTeacher, studyYear, faculty);
         
-        Course course = new Course(courseId, courseName, courseTeacher, yearOption, faculty);
-        
-       
         boolean res = ManagerController.createcourse(course);
         
         if(res) {
@@ -224,7 +247,20 @@ private static Scanner in = new Scanner(System.in);
         
         welcome();
     }
-    
+
+    // Метод для получения списка существующих преподавателей из базы данных или контроллера
+    private static Vector<String> getExistingTeachers() {
+        Vector<String> teachers = new Vector<>();
+        
+        // Пример получения списка преподавателей, например, из контроллера
+        Vector<Teacher> allTeachers = ManagerController.getAllTeachers();  // Здесь можно заменить на реальную логику получения преподавателей
+        
+        for (Teacher teacher : allTeachers) {
+            teachers.add(teacher.getUsername());  // Добавляем имена преподавателей в список
+        }
+        
+        return teachers;
+    }
     
     public static void seeNews() {
         System.out.println("Loading all news...");

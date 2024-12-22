@@ -1,6 +1,8 @@
 package Views;
 
 import java.util.Scanner;
+import java.util.Vector;
+
 import Users.Student;
 import Utils.Course;
 import Utils.Register;
@@ -64,36 +66,54 @@ public class StudentView {
 
     }
     public static void registerForCourse(Student student) {
-        for (Course course : UserController.getAllCourses()) {
+        // Получаем все курсы
+        Vector<Course> availableCourses = UserController.getAllCourses();
+
+        // Фильтруем курсы по факультету и учебному году
+        Vector<Course> filteredCourses = new Vector<>();
+        for (Course course : availableCourses) {
             if (course.getFaculty().equals(student.getFaculty()) && course.getStudyYear() == student.getStudyYear()) {
-                System.out.println(course);
-            }
-        }
-        System.out.println("Enter the course ID to register:");
-        String courseId = in.nextLine();
-
-        // Find the course by its ID
-        Course selectedCourse = null;
-        for (Course course : UserController.getAllCourses()) {
-            if (course.getCourseId().equals(courseId)) {
-                selectedCourse = course;
-                break;
+                filteredCourses.add(course);
             }
         }
 
-        if (selectedCourse != null) {
-            Register register = new Register(student, selectedCourse);
-
-            DBContext.addRegister(register);
-            
-            System.out.println("Successfully registered for course: " + selectedCourse.getCourseName());
-        } else {
-            System.out.println("Course with the given ID not found.");
+        // Если нет доступных курсов, выводим сообщение и возвращаемся в главное меню
+        if (filteredCourses.isEmpty()) {
+            System.out.println("Нет доступных курсов для вашего факультета и учебного года.");
+            welcome(student);
+            return;
         }
 
+        // Выводим список доступных курсов с номерами
+        System.out.println("\nДоступные курсы для вас:");
+        for (int i = 0; i < filteredCourses.size(); i++) {
+            System.out.println((i + 1) + ". " + filteredCourses.get(i).getCourseName());
+        }
+
+        // Запрашиваем номер курса для регистрации
+        System.out.print("Введите номер курса для регистрации: ");
+        int courseChoice = in.nextInt();
+        in.nextLine(); // Очищаем буфер
+
+        // Проверяем, что введен правильный номер курса
+        if (courseChoice < 1 || courseChoice > filteredCourses.size()) {
+            System.out.println("Неверный номер курса. Пожалуйста, попробуйте снова.");
+            return;
+        }
+
+        // Получаем выбранный курс
+        Course selectedCourse = filteredCourses.get(courseChoice - 1);
+
+       // Проверяем, зарегистрирован ли студент на курс
+     
+            // Если студент еще не зарегистрирован, создаем новую регистрацию
+            Register newRegister = new Register(student, selectedCourse);
+            DBContext.addRegister(newRegister); // Добавляем регистрацию в базу данных
+            System.out.println("Вы успешно зарегистрировались на курс: " + selectedCourse.getCourseName());
+
+        // Возвращаемся в главное меню после регистрации
         welcome(student);
     }
-
 
 }
     

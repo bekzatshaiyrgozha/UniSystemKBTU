@@ -1,0 +1,96 @@
+public static void createcourse() {
+    in.nextLine();
+
+    System.out.println("Enter the Course Id:");
+    String courseId = in.nextLine();
+
+    System.out.println("Enter the course name:");
+    String courseName = in.nextLine();
+
+    // Получаем список преподавателей
+    Vector<Teacher> teachers = ManagerController.getAllTeachers();
+
+    if (teachers.isEmpty()) {
+        System.out.println("No teachers available.");
+        return;
+    }
+
+    System.out.println("Select the course teacher:");
+    for (int i = 0; i < teachers.size(); i++) {
+        System.out.println((i + 1) + ". " + teachers.get(i).getName());  // Предположим, у Teacher есть метод getName()
+    }
+    System.out.print("Option: ");
+    int teacherOption = in.nextInt();
+    in.nextLine();  // Очищаем буфер
+
+    if (teacherOption < 1 || teacherOption > teachers.size()) {
+        System.out.println("Invalid teacher option.");
+        return;
+    }
+
+    // Получаем выбранного преподавателя
+    Teacher selectedTeacher = teachers.get(teacherOption - 1);
+
+    System.out.println("Select study year:");
+    System.out.println("1. First Year");
+    System.out.println("2. Second Year");
+    System.out.println("3. Third Year");
+    System.out.println("4. Fourth Year");
+    System.out.print("Option: ");
+    int yearOption = in.nextInt();
+    int studyYear = 0;
+
+    switch (yearOption) {
+        case 1:
+            studyYear = 1;
+            break;
+        case 2:
+            studyYear = 2;
+            break;
+        case 3:
+            studyYear = 3;
+            break;
+        case 4:
+            studyYear = 4;
+            break;
+        default:
+            System.out.println("Invalid year option");
+            return;  
+    }
+
+    System.out.println("Select the faculty:");
+    System.out.println("1. FIT");
+    System.out.println("2. BS");
+    System.out.println("3. SEPI");
+    System.out.print("Option: ");
+    int facultyOption = in.nextInt();
+    Faculty faculty = null;
+
+    switch (facultyOption) {
+        case 1:
+            faculty = Faculty.FIT;
+            break;
+        case 2:
+            faculty = Faculty.BS;
+            break;
+        case 3:
+            faculty = Faculty.SEPI;
+            break;
+        default:
+            System.out.println("Invalid faculty option. Defaulting to FIT.");
+            faculty = Faculty.FIT;
+    }
+
+    // Создаем курс с выбранным преподавателем
+    Course course = new Course(courseId, courseName, selectedTeacher, studyYear, faculty);
+    
+    boolean res = ManagerController.createcourse(course);
+    
+    if(res) {
+        System.out.println("Course has been created successfully!");
+    } else {
+        System.out.println("Error creating course.");
+    }
+    
+    welcome();
+}
