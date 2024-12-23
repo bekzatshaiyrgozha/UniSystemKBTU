@@ -11,7 +11,7 @@ import Utils.Request;
 
 public class DBContext {
     
-    private static String fullPath = "C:\\Users\\Asus\\Desktop\\UniSystemKBTU\\UniversitySystem\\src\\Data\\" ; 
+    private static String fullPath = "/Users/bekzatshaiyrgozha/Desktop/UniSystemKBTU/UniversitySystem/src/Data/" ; 
     private static DBContext db = new DBContext();
 
     // Static lists holding the data

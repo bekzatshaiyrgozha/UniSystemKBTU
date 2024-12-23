@@ -31,6 +31,8 @@ public class TeacherView {
         System.out.println("- 4. Submit complaint");
         System.out.println("- 5. Put Marks");
         System.out.println("- 6. View Student Attestation"); 
+        System.out.println("- 7. Open attendence");
+
         System.out.print("Option : ");
         int option = in.nextInt();
         in.nextLine();  
@@ -57,11 +59,51 @@ public class TeacherView {
         else if(option == 6) {
         	viewStudentAttestation(loggedInTeacher); 
         }
+        else if(option == 7) {
+        	openAttendence(loggedInTeacher); 
+
+        }
         else {
             System.out.println("Invalid option, try again.");
             welcome(loggedInTeacher);  
         }
     }
+    public static void openAttendence(Teacher teacher) throws UserNotFoundException {
+    	System.out.println("Choose course:");
+    	List<Course> courses = DBContext.getCourse();
+    	int  i = 1;
+    	for(Course couse : courses) {
+    		System.out.println(i + ". " + couse.getCourseName());
+    		i++;
+    	}
+    	System.out.println("Enter course number:");
+    	int courseChoise = in.nextInt();
+    	in.nextLine();
+    	
+    	if (courseChoise < 1 ) {
+            System.out.println("Invalid choice. Returning to main menu.");
+            welcome(teacher);
+            return;
+        }
+    	List<Student> students = DBContext.getStudents();
+    	Course selectedCourses = courses.get(courseChoise - 1);
+    	
+        for (Student student : students) {
+            for (Register register : DBContext.registerList) {
+                if (register.getCourse().getCourseId().equals(selectedCourses.getCourseId()) &&
+                        register.getStudent().getUsername().equals(student.getUsername())) {
+                	
+                	student.setattendent();
+                    
+                }
+            }
+        }
+
+    	
+    	
+    	welcome(teacher);
+    }
+
     public static void viewStudentAttestation(Teacher teacher) throws UserNotFoundException {
         System.out.println("Select a course:");
         List<Course> teacherCourses = new ArrayList<>();

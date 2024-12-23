@@ -3,6 +3,8 @@ package Views;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.Vector;
 
 import Users.Student;
@@ -25,9 +27,16 @@ public class StudentView {
         System.out.println("1. See all news");
         System.out.println("2. Send request");
         System.out.println("3. View My Attestations"); 
+        System.out.println("4. Attendent");
+        System.out.println("5. Attendent or not");
+
         System.out.println("7. View My Profile");
         System.out.println("8. Register for a Course");
-
+        
+        if (statusResetTimer == null) {
+            startAttendentStatusResetTimer(); 
+        }
+        
         int option = in.nextInt();
         in.nextLine();  
 
@@ -44,6 +53,13 @@ public class StudentView {
         else if(option == 3) {
         	viewMyAttestations(loggedInStudent) ;
         }
+        else if (option == 4) {
+        	attendent(loggedInStudent); 
+        }
+        else if (option == 5) {
+        	attendentOrNot(loggedInStudent); 
+        }
+
         else if (option == 7) {
             myProfile(loggedInStudent);  
         }
@@ -55,6 +71,51 @@ public class StudentView {
             welcome(loggedInStudent);  
         }
     }
+    
+    public static void attendentOrNot(Student student) throws UserNotFoundException {
+    	if(student.getAttendentStatus()) {
+    		System.out.println("Yes, attendent.");
+    	}else {
+    		System.out.println("No, attendention.");
+    	}
+    	welcome(student);
+    }
+    public static void attendent(Student student) throws UserNotFoundException {
+        if(student.getattendent() == true) {
+            System.out.println("Are you want to attend? (yes or no)");
+            String answer = in.nextLine();
+            if(answer.equals("yes")) {
+                student.setAttendentStatus(true);  
+                System.out.println("You are now marked as attended.");
+            } else {
+                System.out.println("You did not attend.");
+                student.setAttendentStatus(false);
+            }
+        } else {
+            System.out.println("You have already marked as attended.");
+        }
+        welcome(student);
+        
+    }
+    private static Timer statusResetTimer;
+
+    private static void startAttendentStatusResetTimer() {
+        if (statusResetTimer != null) {
+            statusResetTimer.cancel(); 
+        }
+
+        statusResetTimer = new Timer(); 
+        statusResetTimer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                for (Student st : DBContext.getStudents()) {
+                    st.resetAttendentStatus(); 
+                }
+                System.out.println("All students' attendent statuses have been reset.");
+            }
+        }, 180 * 1000, 180 * 1000); 
+    }
+
     private static void viewMyAttestations(Student loggedInStudent) throws UserNotFoundException {
     	System.out.println("Select a course to view your attestation:");
         
